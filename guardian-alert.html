@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta name="theme-color" content="#020914">
+<title>Guardian Alert • CyberShield</title>
+<style>
+:root{--bg:#020914;--c:#071321;--line:#193047;--tx:#f5f7fa;--t2:#9eacbf;--t3:#718095;--g:#00ff9d;--cy:#00d9ff;--am:#ffb020;--rd:#ff4668}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent!important}
+body{margin:0;min-height:100vh;color:var(--tx);font-family:Inter,"Segoe UI",system-ui,Roboto,Arial,sans-serif;background:radial-gradient(120% 50% at 50% -8%,#0b2840,transparent 62%) fixed,var(--bg)}
+button,a,input{outline:none!important;font-family:inherit}
+.wrap{max-width:650px;margin:0 auto;padding:0 20px calc(48px + env(safe-area-inset-bottom))}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;margin:0 -20px;padding:calc(12px + env(safe-area-inset-top)) 20px 12px;background:rgba(2,9,20,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.back{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;background:var(--c);color:var(--cy);text-decoration:none}
+.title{font-size:17px;font-weight:800}.sub{font-size:12px;color:var(--t3);margin-top:2px;white-space:nowrap}
+.pill{margin-left:auto;display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--t2);background:var(--c);border:1px solid var(--line)}
+.pill i{width:8px;height:8px;border-radius:50%;background:#52627a}
+.pill.on{color:var(--g);border-color:rgba(0,255,157,.4)}.pill.on i{background:var(--g);animation:p 1.4s infinite}
+.pill.watch{color:var(--am);border-color:rgba(255,176,32,.5)}.pill.watch i{background:var(--am);animation:p 1s infinite}
+@keyframes p{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.card{margin-top:16px;padding:20px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(12,29,47,.92),rgba(7,19,33,.96));box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.eye{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--t3)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hero{display:flex;align-items:center;gap:16px}
+.ring{width:64px;height:64px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:20px;color:var(--t3);background:#0a1a2b;border:1px solid var(--line);transition:.3s}
+.hero.on .ring{color:var(--g);background:linear-gradient(145deg,#0a2a3b,#06261b);border-color:rgba(0,255,157,.5);box-shadow:0 0 28px rgba(0,255,157,.18)}
+.hero h2{margin:0;font-size:20px}.hero p{margin:4px 0 0;font-size:13px;line-height:1.5;color:var(--t2)}
+.sw{position:relative;width:56px;height:32px;flex:none;padding:0;border-radius:999px;border:1px solid var(--line);background:#0d2236;cursor:pointer;transition:.2s}
+.sw i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#7f8da0;transition:.2s}
+.sw.on{background:rgba(0,255,157,.18);border-color:var(--g)}.sw.on i{left:27px;background:var(--g)}
+.chk{display:flex;align-items:center;gap:12px;margin-top:10px;padding:12px;border-radius:14px;background:rgba(2,9,20,.6);border:1px solid var(--line)}
+.dot{width:24px;height:24px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.ok .dot{color:var(--g);background:rgba(0,255,157,.12)}.no .dot{color:var(--rd);background:rgba(255,70,104,.12)}
+.chk b{display:block;font-size:14px}.chk span{font-size:12px;color:var(--t3)}.chk div{flex:1}
+.mini{padding:9px 14px;border-radius:10px;border:1px solid rgba(0,217,255,.55);background:#061a2a;color:var(--cy);font-size:13px;font-weight:800;cursor:pointer}
+.ok .mini{display:none}
+label{display:block;margin-top:14px;font-size:12px;color:var(--t2)}
+input{width:100%;height:48px;margin-top:6px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:#020914;color:var(--tx);font-size:15px}
+input:focus{border-color:var(--cy)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:50px;margin-top:16px;border:0;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;color:#00130b;background:linear-gradient(180deg,#22ffb0,#00e08a);box-shadow:0 8px 24px rgba(0,255,157,.2)}
+.btn:active{transform:scale(.98)}.btn.sec{color:var(--cy);background:#061a2a;border:1px solid rgba(0,217,255,.55);box-shadow:none}
+.err{min-height:18px;margin-top:10px;font-size:13px;color:var(--rd)}.okm{color:var(--g)}
+.lv{display:flex;gap:12px;margin-top:12px;font-size:13px;line-height:1.5;color:var(--t2)}
+.lv b{display:block;color:var(--tx);font-size:14px}.lv i{width:10px;height:10px;margin-top:5px;flex:none;border-radius:50%}
+.tr{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:11px 12px;border-radius:12px;background:rgba(2,9,20,.6);border:1px solid var(--line);font-size:14px}
+.tr button{border:0;background:none;color:var(--rd);font-weight:800;cursor:pointer}
+.empty{padding:16px 0;text-align:center;font-size:13px;color:var(--t3)}
+.ev{display:flex;gap:10px;margin-top:10px;font-size:13px;line-height:1.5;color:var(--t2)}.ev time{flex:none;width:48px;color:var(--t3)}
+.ev i{width:8px;height:8px;margin-top:6px;flex:none;border-radius:50%}
+.note{margin-top:12px;padding:12px 14px;border-radius:12px;background:#0a1a2b;border:1px solid var(--line);font-size:12.5px;line-height:1.6;color:var(--t3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<a class="back" href="index.html" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div><div class="title">Guardian Alert</div><div class="sub">Family scam-call guard</div></div>
+<div class="pill" id="pill"><i></i><span id="pillTx">Off</span></div>
+</header>
+
+<section class="card">
+<div class="hero" id="hero">
+<div class="ring"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l8 3v6.2c0 4.7-3.3 8.2-8 9.8-4.7-1.6-8-5.1-8-9.8V5.5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
+<div style="flex:1"><h2>Guardian Alert</h2><p id="heroTx">Off. Switch on to protect this phone.</p></div>
+<button class="sw" id="sw" type="button" role="switch" aria-checked="false" aria-label="Guardian Alert" onclick="toggle()"><i></i></button>
+</div>
+<div class="err" id="swErr"></div>
+</section>
+
+<section class="card">
+<div class="row"><div class="eye">Setup</div><div class="eye" id="ready">0 of 4</div></div>
+<div id="perms"></div>
+</section>
+
+<section class="card">
+<div class="eye">Who gets the alerts</div>
+<label for="owner">Name shown in alerts (for example, Mom)</label>
+<input id="owner" maxlength="20" placeholder="Mom" autocomplete="off">
+<label for="g0">Guardian phone numbers (up to 3, they install nothing)</label>
+<input id="g0" inputmode="tel" placeholder="98XXXXXXXX"><input id="g1" inputmode="tel" placeholder="Optional"><input id="g2" inputmode="tel" placeholder="Optional">
+<button class="btn" type="button" onclick="save()">Save guardians</button>
+<div class="err" id="gErr"></div>
+</section>
+
+<section class="card">
+<div class="eye">How it reacts</div>
+<div class="lv"><i style="background:var(--am)"></i><div><b>Level 1: armed</b>An unknown number is answered. A quiet notice only. No waiting time.</div></div>
+<div class="lv"><i style="background:var(--rd)"></i><div><b>Level 2: alert</b>A payment app opens during the call, or within 30 minutes after. A 30 second brake screen appears and guardians get an SMS at once.</div></div>
+<div class="lv"><i style="background:var(--rd)"></i><div><b>Level 3: emergency</b>A remote-control app or a new app appears. A second, louder SMS goes out.</div></div>
+<div class="note">It never listens to calls. It only sees that a call is on, who is not in contacts, and which app opens. It cannot tell a scam payment from a normal one, so the brake has an "I know this person" button.</div>
+</section>
+
+<section class="card">
+<div class="eye">Trusted numbers</div>
+<div id="trusted"></div>
+</section>
+
+<section class="card">
+<div class="row"><div class="eye">Activity</div><button class="mini" type="button" onclick="clr()">Clear</button></div>
+<div id="log"></div>
+<button class="btn sec" type="button" onclick="test()">Send a test SMS to guardians</button>
+<div class="err" id="tErr"></div>
+</section>
+</div>
+<script>
+var B=window.GuardianAndroid,preview=!(B&&B.getGuardianState);
+var mock={enabled:false,owner:"",guardians:[],trusted:["9876543210"],armed:false,perms:{phone:false,sms:false,usage:false,overlay:false},log:[]};
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function get(){if(!preview){try{return JSON.parse(B.getGuardianState())}catch(e){}}return mock}
+function $(i){return document.getElementById(i)}
+var ICON={y:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',n:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'};
+var PERMS=[["phone","Calls and contacts","See incoming calls, check contacts, end a call"],["sms","Send SMS","Alert your guardians"],["usage","Usage access","See when a payment app opens"],["overlay","Show over other apps","Show the brake screen over GPay"]];
+function render(){
+  var s=get(),p=s.perms||{},n=0,html="";
+  PERMS.forEach(function(r){var ok=!!p[r[0]];if(ok)n++;html+='<div class="chk '+(ok?"ok":"no")+'"><span class="dot">'+(ok?ICON.y:ICON.n)+'</span><div><b>'+r[1]+'</b><span>'+r[2]+'</span></div><button class="mini" type="button" onclick="ask(\''+r[0]+'\')">Allow</button></div>'});
+  $("perms").innerHTML=html;$("ready").textContent=n+" of 4";
+  $("sw").className="sw"+(s.enabled?" on":"");$("sw").setAttribute("aria-checked",s.enabled?"true":"false");
+  $("hero").className="hero"+(s.enabled?" on":"");
+  $("heroTx").textContent=!s.enabled?"Off. Switch on to protect this phone.":(s.armed?"Unknown call: watching for payments.":"On. Quietly watching for unknown calls.");
+  $("pill").className="pill"+(s.enabled?(s.armed?" watch":" on"):"");$("pillTx").textContent=!s.enabled?"Off":(s.armed?"Watching":"Protected");
+  if(document.activeElement.id!=="owner"&&!$("owner").value)$("owner").value=s.owner||"";
+  for(var i=0;i<3;i++){var el=$("g"+i);if(document.activeElement!==el&&!el.value)el.value=(s.guardians||[])[i]||""}
+  var t=s.trusted||[];$("trusted").innerHTML=t.length?t.map(function(x){return'<div class="tr"><span>'+esc(x)+'</span><button type="button" onclick="rm(\''+esc(x)+'\')">Remove</button></div>'}).join(""):'<div class="empty">None yet. Numbers you mark as known appear here.</div>';
+  var l=s.log||[],col=["#718095","#ffb020","#ff4668","#ff4668"];
+  $("log").innerHTML=l.length?l.map(function(e){var d=new Date(e.t);return'<div class="ev"><time>'+d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+'</time><i style="background:'+col[e.l||0]+'"></i><span>'+esc(e.x)+'</span></div>'}).join(""):'<div class="empty">No events yet.</div>';
+}
+function ask(k){if(preview){mock.perms[k]=true;render();return}B.askGuardianPermission(k);setTimeout(render,600)}
+function toggle(){
+  var s=get(),on=!s.enabled,p=s.perms||{};$("swErr").textContent="";
+  if(on&&(!(s.guardians||[]).length)){$("swErr").textContent="Add at least one guardian number first.";return}
+  if(on&&!(p.phone&&p.sms&&p.usage&&p.overlay)){$("swErr").textContent="Finish the setup list below first."; return}
+  if(preview)mock.enabled=on;else B.setGuardianEnabled(on);
+  render();
+}
+function save(){
+  var nums=[],e=$("gErr");e.className="err";
+  for(var i=0;i<3;i++){var d=$("g"+i).value.replace(/\D/g,"");if(!d)continue;if(d.length>10&&d.slice(0,2)==="91")d=d.slice(2);if(d.length!==10){e.textContent="Guardian "+(i+1)+" needs a 10-digit number.";return}nums.push(d)}
+  if(!nums.length){e.textContent="Enter at least one guardian number.";return}
+  var o=$("owner").value.trim();
+  if(preview){mock.guardians=nums;mock.owner=o}else B.saveGuardianSettings(o,nums.join(","));
+  e.className="err okm";e.textContent="Saved.";render();
+}
+function rm(n){if(preview)mock.trusted=mock.trusted.filter(function(x){return x!==n});else B.removeTrusted(n);render()}
+function clr(){if(preview)mock.log=[];else B.clearGuardianLog();render()}
+function test(){
+  var s=get(),e=$("tErr");e.className="err";
+  if(!(s.guardians||[]).length){e.textContent="Save a guardian number first.";return}
+  if(preview){mock.log.unshift({t:Date.now(),l:0,x:"Preview: test SMS would be sent."})}else B.testGuardianAlert();
+  e.className="err okm";e.textContent="Test sent.";setTimeout(render,400);
+}
+document.addEventListener("visibilitychange",function(){if(!document.hidden)render()});
+if(preview){mock.log=[{t:Date.now(),l:0,x:"Preview mode: not connected to the Android app."}]}
+render();
+</script>
+</body>
+</html>

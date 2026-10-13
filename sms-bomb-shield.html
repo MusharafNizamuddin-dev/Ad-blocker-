@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>SMS Bomb Shield • CyberShield</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#020914;color:#f5f7fa;font-family:Segoe UI,Arial,sans-serif}
+.wrap{max-width:600px;margin:auto;padding:0 20px 50px}
+.top{display:flex;align-items:center;gap:14px;padding:22px 0;border-bottom:1px solid #17283a}
+.back{width:42px;height:42px;border:1px solid #193047;border-radius:10px;background:#071321;color:#00d9ff;font-size:20px;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0}
+.title{font-size:20px;font-weight:800}
+.small{color:#7f8da0;font-size:13px}
+p{color:#9eacbf;line-height:1.7}
+.card{background:#071321;border:1px solid #193047;border-radius:20px;padding:27px;margin-top:22px}
+.icon-row{display:flex;justify-content:center;margin-bottom:6px}
+.step{display:flex;gap:14px;align-items:flex-start;margin-top:18px}
+.step-icon{width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#020914;border:1px solid #193047}
+.step h3{margin:0 0 4px;font-size:15px}
+.step p{margin:0;font-size:13px}
+.section-title{font-size:12px;font-weight:900;letter-spacing:1px;color:#7f8da0;margin:0 0 14px}
+textarea{width:100%;min-height:150px;padding:14px;border-radius:10px;border:1px solid #193047;background:#020914;color:#f5f7fa;font-size:13px;line-height:1.6;font-family:inherit;resize:vertical}
+.btn{width:100%;display:inline-block;margin-top:16px;padding:14px 20px;border-radius:10px;background:#00ff9d;color:#00130b;font-weight:800;border:0;text-decoration:none;cursor:pointer;font-size:15px;text-align:center}
+.btn.secondary{background:#061a2a;color:#00d9ff;border:1px solid #00d9ff}
+.note{margin-top:14px;padding:14px 16px;border-radius:12px;background:#0a1a2b;border:1px solid #193047;font-size:12.5px;color:#7f8da0;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+<a class="back" href="index.html">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</a>
+<div>
+<div class="title">SMS Bomb Shield</div>
+<div class="small">Detect &amp; respond to SMS flooding</div>
+</div>
+</div>
+
+<div class="card">
+<div class="icon-row">
+<svg fill="none" height="46" viewbox="0 0 64 64" width="46" xmlns="http://www.w3.org/2000/svg">
+<path d="M32 7L51 14V29C51 42 43 51 32 57C21 51 13 42 13 29V14L32 7Z" stroke="#00d9ff" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M32 22V36" stroke="#ff4668" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="32" cy="42" fill="#ff4668" r="2"></circle>
+</svg>
+</div>
+<p style="text-align:center">
+When an attacker enters your number into signup forms across many different sites, each site sends you a real code from its own number. That flood is happening on their servers, so no app on your phone can stop the sending itself. What this tool does instead: watch for that exact pattern and give you a fast way to quiet your phone while you report it.
+</p>
+
+<div class="step">
+<div class="step-icon">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9 2 7 4.5 7 8V11L5 15V16H19V15L17 11V8C17 4.5 15 2 12 2Z" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M10 19C10 20 11 21 12 21C13 21 14 20 14 19" stroke="#00ff9d" stroke-linecap="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<h3>1. Detection runs in the background</h3>
+<p>Once turned on below, it watches for 4 or more different senders texting you within 3 minutes - the real signature of an SMS bombing attack.</p>
+</div>
+</div>
+
+<div class="step">
+<div class="step-icon">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M17 3L3 10L10 13L14 21L17 3Z" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<h3>2. You get an alert with a Silence button</h3>
+<p>Tapping it turns on Do Not Disturb for 15 minutes, so your phone stops buzzing. It turns itself back off automatically after that.</p>
+</div>
+</div>
+
+<div class="step">
+<div class="step-icon">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" stroke="#00ff9d" stroke-width="2" width="14" x="5" y="4"></rect><path d="M9 9H15M9 13H15M9 17H12" stroke="#00ff9d" stroke-linecap="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<h3>3. You report it to your carrier</h3>
+<p>Only your carrier can actually stop the messages at the source. Use the template below.</p>
+</div>
+</div>
+
+<div class="note">
+Turning detection on needs two one-time permissions in your phone's Settings app (this can't be done automatically):
+<br/><br/>
+&#8226; <strong>Notification access</strong> - Settings &gt; Apps &gt; Special app access &gt; Notification access &gt; turn on CyberShield
+<br/>
+&#8226; <strong>Do Not Disturb access</strong> - Settings &gt; Apps &gt; Special app access &gt; Do Not Disturb access &gt; turn on CyberShield
+<br/><br/>
+The exact wording may differ slightly by phone brand, but it's always under Settings &gt; Apps &gt; Special app access.
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">CARRIER REPORT TEMPLATE</div>
+<textarea id="reportText" readonly>I am receiving a high volume of unsolicited SMS verification codes and account notifications from many different senders within a short period of time. This matches the pattern of "SMS bombing" / "SMS pumping" abuse, where my phone number was submitted to multiple websites' signup or login forms without my consent. Please investigate and apply any available spam/abuse filtering to my line, and let me know what further steps I can take.
+
+My number: [YOUR PHONE NUMBER]
+Approximate time it started: [DATE / TIME]
+Number of texts received: [APPROXIMATE COUNT]</textarea>
+<button class="btn" id="copyButton" onclick="copyTemplate()" type="button">Copy Template</button>
+</div>
+</div>
+
+<script>
+function copyTemplate(){
+    var textarea = document.getElementById('reportText');
+    var button = document.getElementById('copyButton');
+
+    textarea.select();
+    textarea.setSelectionRange(0, 999999);
+
+    var copied = false;
+    try{
+        copied = document.execCommand('copy');
+    }catch(e){
+        copied = false;
+    }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(textarea.value).then(function(){
+            button.textContent = 'Copied';
+            setTimeout(function(){ button.textContent = 'Copy Template'; }, 1800);
+        }).catch(function(){
+            if(copied){
+                button.textContent = 'Copied';
+                setTimeout(function(){ button.textContent = 'Copy Template'; }, 1800);
+            }
+        });
+    } else if(copied){
+        button.textContent = 'Copied';
+        setTimeout(function(){ button.textContent = 'Copy Template'; }, 1800);
+    }
+}
+</script>
+</body>
+</html>

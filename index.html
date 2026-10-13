@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>CyberShield</title>
+<style>
+.about-modal{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.72);
+
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transition:.2s ease;
+}
+
+.about-modal.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.about-card{
+    width:min(420px,100%);
+
+    padding:28px 24px 24px;
+
+    background:#071321;
+    border:1px solid #193047;
+    border-radius:20px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.55);
+
+    text-align:center;
+
+    transform:translateY(12px) scale(.97);
+    transition:.2s ease;
+}
+
+.about-modal.show .about-card{
+    transform:translateY(0) scale(1);
+}
+
+.about-icon{
+    width:64px;
+    height:64px;
+
+    margin:0 auto 14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid #00d9ff;
+    border-radius:16px;
+
+    background:#020914;
+
+    font-size:30px;
+}
+
+.about-title{
+    font-size:24px;
+    font-weight:900;
+    color:#f5f7fa;
+}
+
+.about-subtitle{
+    margin-top:4px;
+
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:1.8px;
+
+    color:#00ff9d;
+}
+
+.about-divider{
+    height:1px;
+    margin:22px 0;
+
+    background:#193047;
+}
+
+.about-text{
+    margin:0;
+
+    color:#aab7c7;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.about-mode{
+    margin-top:20px;
+    padding:13px 15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border:1px solid #193047;
+    border-radius:12px;
+
+    background:#020914;
+
+    text-align:left;
+}
+
+.about-mode span{
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:1.2px;
+    color:#718095;
+}
+
+.about-mode strong{
+    font-size:13px;
+    color:#00ff9d;
+}
+
+.about-close{
+    width:100%;
+    height:48px;
+
+    margin-top:20px;
+
+    border:1px solid #00d9ff;
+    border-radius:12px;
+
+    background:#061a2a;
+    color:#00d9ff;
+
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+.about-close:hover{
+    background:#0a263b;
+}
+
+.about-close:focus,
+.about-close:active{
+    outline:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.menu-button{
+    width:52px;
+    height:52px;
+    padding:0;
+    border:1px solid #193047;
+    border-radius:12px;
+    background:#071321;
+    color:#00d9ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:.15s ease;
+}
+
+.menu-button:hover{
+    border-color:#00d9ff;
+    background:#0a1a2b;
+}
+
+.menu-button:focus,
+.menu-button:active{
+    outline:none;
+    -webkit-tap-highlight-color:transparent;
+}
+.menu-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9997;
+    background:rgba(0,0,0,.65);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:.2s ease;
+}
+
+.menu-overlay.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.side-menu{
+    position:fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    z-index:9998;
+    width:min(330px,88vw);
+    padding:24px 18px;
+    background:#071321;
+    border-right:1px solid #193047;
+    box-shadow:18px 0 45px rgba(0,0,0,.35);
+
+    transform:translateX(-105%);
+    transition:transform .25s ease;
+
+    overflow-y:auto;
+}
+
+.side-menu.show{
+    transform:translateX(0);
+}
+
+.side-menu-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.side-menu-title{
+    font-size:22px;
+    font-weight:900;
+    color:#f5f7fa;
+}
+
+.side-menu-subtitle{
+    margin-top:3px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:#00ff9d;
+}
+
+.menu-close{
+    width:42px;
+    height:42px;
+    border:1px solid #193047;
+    border-radius:10px;
+    background:#020914;
+    color:#00d9ff;
+    font-size:28px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.menu-close:focus,
+.menu-close:active{
+    outline:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.side-menu-divider{
+    height:1px;
+    margin:20px 0;
+    background:#193047;
+}
+
+.side-menu-nav{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.side-menu-item{
+    width:100%;
+    min-height:62px;
+    padding:10px 12px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    border:1px solid transparent;
+    border-radius:13px;
+
+    background:transparent;
+    color:#f5f7fa;
+    text-align:left;
+    font:inherit;
+
+    cursor:pointer;
+    transition:.15s ease;
+}
+
+.side-menu-item:hover{
+    background:#0a1a2b;
+    border-color:#193047;
+}
+
+.side-menu-item.active{
+    background:#06261b;
+    border-color:#00ff9d;
+}
+
+.side-menu-icon{
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+    background:#020914;
+    color:#00d9ff;
+
+    font-size:21px;
+    font-weight:900;
+}
+
+.side-menu-item.active .side-menu-icon{
+    color:#00ff9d;
+}
+
+.side-menu-item strong{
+    display:block;
+    font-size:14px;
+}
+
+.side-menu-item small{
+    display:block;
+    margin-top:3px;
+    color:#718095;
+    font-size:11px;
+}
+
+.side-menu-item:focus,
+.side-menu-item:active{
+    outline:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+@media(max-width:500px){
+    .side-menu{
+        width:min(320px,88vw);
+    }
+}
+
+*{box-sizing:border-box}
+	*{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;-webkit-user-select:none;}
+body{margin:0;background:#020914;color:#f5f7fa;font-family:Segoe UI,Arial,sans-serif}
+.wrap{max-width:1050px;margin:auto;padding:0 20px 50px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid #17283a}
+.logo{font-size:27px;font-weight:800}.logo span,h1 span{color:#00ff9d}.small{color:#7f8da0;font-size:13px}
+.hero{text-align:center;padding:55px 10px 35px}.badge{display:inline-block;border:1px solid #00ff9d;color:#00ff9d;border-radius:30px;padding:9px 17px;font-weight:700;font-size:13px}
+h1{font-size:50px;line-height:1.1;margin:22px 0 15px}p{color:#9eacbf;line-height:1.7}
+.tool-section{margin-top:25px}
+.tool-heading{font-size:18px;font-weight:900;letter-spacing:.8px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card,.panel,.setup,.dashboard{background:#071321;border:1px solid #193047;border-radius:20px;padding:27px;text-align:center}.icon{font-size:42px}
+.btn{display:inline-block;margin-top:16px;padding:13px 20px;border-radius:10px;background:#00ff9d;color:#00130b;font-weight:800;border:0;text-decoration:none;cursor:pointer}.btn:disabled{cursor:default}
+.setup{display:none;margin-top:25px;text-align:center;border-color:#00ff9d;box-shadow:0 0 25px rgba(0,255,157,.08)}.setup-icon{width:70px;height:70px;margin:0 auto 15px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#06261b;border:1px solid #00ff9d;color:#00ff9d;font-size:34px}.setup h2{margin:8px 0}.setup p{max-width:600px;margin:10px auto}.status-list{max-width:430px;margin:25px auto;text-align:left}.status-item{display:flex;align-items:center;gap:12px;padding:13px 15px;margin:8px 0;border-radius:10px;background:#020914;border:1px solid #193047}.status-check{color:#00ff9d;font-weight:900;font-size:18px}
+.dashboard{display:none;margin-top:25px;text-align:left;border-color:#00ff9d;box-shadow:0 0 30px rgba(0,255,157,.07)}.dashboard-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.dashboard-title{display:flex;align-items:center;gap:12px}.dashboard-title-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#06261b;border:1px solid #00ff9d;font-size:25px}.dashboard-title h2{margin:0}.active-status{display:flex;align-items:center;gap:7px;color:#00ff9d;font-weight:800;font-size:13px;white-space:nowrap}.active-dot{width:9px;height:9px;border-radius:50%;background:#00ff9d;box-shadow:0 0 10px rgba(0,255,157,.7)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:25px}.stat{background:#020914;border:1px solid #193047;border-radius:13px;padding:17px 12px;text-align:center}.stat-number{font-size:29px;font-weight:800;margin-bottom:5px}.stat-label{color:#8291a5;font-size:12px}.stat-green .stat-number{color:#00ff9d}.stat-red .stat-number{color:#ff4d6d}.stat-yellow .stat-number{color:#ffcc00}.stat-blue .stat-number{color:#00d9ff}
+.section-title{font-size:14px;font-weight:800;letter-spacing:.5px;margin:25px 0 12px}.latest{background:#020914;border:1px solid #193047;border-radius:13px;padding:18px}.latest-empty{text-align:center;color:#718095;padding:15px 5px}.detection{border-left:4px solid #00ff9d}.detection.suspicious{border-left-color:#ff4d6d}.detection.check{border-left-color:#ffcc00}.detection.safe{border-left-color:#00ff9d}.detection-status{font-weight:900;font-size:14px;margin-bottom:7px}.detection-url{word-break:break-all;color:#e7edf5;font-size:14px}.detection-reason{color:#8f9db0;margin-top:8px;line-height:1.5;font-size:13px}.detection-time{color:#5f6d80;margin-top:9px;font-size:11px}
+.activity-list{display:flex;flex-direction:column;gap:8px}.activity-item{display:flex;align-items:center;gap:12px;background:#020914;border:1px solid #193047;border-radius:10px;padding:12px}.activity-icon{width:35px;height:35px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#071321;flex-shrink:0}.activity-info{min-width:0;flex:1}.activity-url{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}.activity-status{font-size:11px;margin-top:3px;font-weight:700}.activity-time{color:#5f6d80;font-size:10px;white-space:nowrap}.activity-empty{text-align:center;color:#718095;padding:20px}
+.panel{display:none;margin-top:25px;text-align:left}.result{padding:18px;border-radius:12px;background:#020914;border-left:4px solid #00ff9d}.result.bad{border-left-color:#ff4d6d}.result.warn{border-left-color:#ffcc00}input{width:100%;padding:14px;border-radius:10px;border:1px solid #294158;background:#020914;color:white}
+
+/* Link Shield notification dot */
+.shield-button-wrap{
+    display:inline-block;
+}
+
+#notificationAccessButton{
+    position:relative;
+}
+
+.shield-notify-dot{
+    display:none;
+    position:absolute;
+    top:5px;
+    right:5px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#ff304f;
+    box-shadow:0 0 9px rgba(255,48,79,.9);
+    border:2px solid #00ff9d;
+    pointer-events:none;
+}
+
+.shield-notify-dot.show{
+    display:block;
+}
+
+/* Dashboard refresh button */
+.dashboard-refresh{
+    margin-top:0;
+    padding:10px 15px;
+    font-size:12px;
+    background:#102237;
+    color:#00d9ff;
+    border:1px solid #00d9ff;
+    outline:none;
+    box-shadow:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.dashboard-refresh:hover,
+.dashboard-refresh:focus,
+.dashboard-refresh:active{
+    outline:none;
+    box-shadow:none;
+}
+/* First-launch device selection */
+
+.device-choice{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(1,7,14,.94);
+    backdrop-filter:blur(8px);
+}
+
+.device-choice.show{
+    display:flex;
+}
+
+.device-choice-box{
+    width:min(560px,100%);
+    background:#071321;
+    border:1px solid #00ff9d;
+    border-radius:22px;
+    padding:30px 24px;
+    text-align:center;
+    box-shadow:0 0 45px rgba(0,255,157,.12);
+}
+
+.device-choice-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#06261b;
+    border:1px solid #00ff9d;
+    color:#00ff9d;
+    font-size:34px;
+}
+
+.device-choice-box h2{
+    margin:8px 0;
+    font-size:26px;
+}
+
+.device-choice-box p{
+    margin:0 auto 24px;
+    max-width:450px;
+}
+
+.device-options{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.device-option{
+    width:100%;
+    padding:20px 14px;
+    border-radius:15px;
+    border:1px solid #193047;
+    background:#020914;
+    color:#f5f7fa;
+    cursor:pointer;
+    font:inherit;
+    font-weight:800;
+    transition:.15s ease;
+}
+
+.device-option:hover{
+    border-color:#00d9ff;
+    transform:translateY(-2px);
+}
+
+.device-option:focus,
+.device-option:active{
+    outline:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.device-option-icon{
+    display:block;
+    margin:0 auto 9px;
+}
+
+.device-choice-note{
+    margin-top:18px !important;
+    margin-bottom:0 !important;
+    font-size:12px;
+    color:#718095 !important;
+}
+
+@media(max-width:500px){
+
+    .device-options{
+        grid-template-columns:1fr;
+    }
+
+    .device-choice-box{
+        padding:25px 18px;
+    }
+
+}
+@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){h1{font-size:40px}.grid{grid-template-columns:1fr}.dashboard-header{align-items:flex-start;flex-direction:column}}
+@media(max-width:500px){.logo{font-size:22px}.small{font-size:11px}.hero{padding-top:40px}.stats{gap:8px}.stat{padding:14px 8px}.stat-number{font-size:25px}}
+button,
+button:focus,
+button:active,
+a,
+a:focus,
+a:active{
+    outline:none !important;
+    -webkit-tap-highlight-color:transparent !important;
+}
+</style>
+</head>
+<body>
+
+<!-- CYBERSHIELD CINEMATIC BOOT -->
+<div id="cyberBoot" class="cyber-boot" aria-hidden="true">
+  <div class="boot-grid"></div>
+  <div class="boot-vignette"></div>
+  <div class="boot-top"><span>CYBERSHIELD // SECURITY CORE</span><span>SYS-01</span></div>
+  <div class="boot-center">
+    <div class="boot-particles" id="bootParticles"></div>
+    <div class="boot-shield">
+      <svg viewBox="0 0 180 210" aria-hidden="true">
+        <path class="shield-outline" d="M90 10 L158 35 V91 C158 142 130 180 90 200 C50 180 22 142 22 91 V35 Z"/>
+        <path class="shield-inner" d="M90 27 L143 47 V91 C143 129 121 157 90 175 C59 157 37 129 37 91 V47 Z"/>
+        <path class="shield-check" d="M58 103 L79 124 L124 77"/>
+      </svg>
+      
+    </div>
+    <div class="boot-title">CYBER<span>SHIELD</span></div>
+    <div class="boot-status" id="bootStatus">INITIALIZING SECURITY CORE</div>
+    <div class="boot-progress"><i id="bootProgress"></i></div>
+  </div>
+  <div class="boot-events" id="bootEvents"></div>
+  <div class="boot-bottom">LEARN. ANALYZE. STAY SECURE.</div>
+</div>
+<style id="cyber-intro-styles">
+.cyber-boot{position:fixed;inset:0;z-index:30000;background:#01060b;color:#dffdf4;overflow:hidden;font-family:Segoe UI,Arial,sans-serif;display:flex;align-items:center;justify-content:center;animation:bootFade .9s ease 7.7s forwards}
+.cyber-boot.hidden{display:none}
+.boot-grid{position:absolute;inset:-30%;background-image:linear-gradient(rgba(0,217,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,217,255,.08) 1px,transparent 1px);background-size:46px 46px;transform:perspective(500px) rotateX(62deg) translateY(16%);opacity:.45;animation:gridMove 5s linear infinite}
+.boot-vignette{position:absolute;inset:0;background:radial-gradient(circle at center,transparent 15%,rgba(1,6,11,.25) 45%,#01060b 100%)}
+.boot-top,.boot-bottom{position:absolute;left:28px;right:28px;display:flex;justify-content:space-between;font:700 10px/1 monospace;letter-spacing:2px;color:#58717d}
+.boot-top{top:24px}.boot-bottom{bottom:24px;justify-content:center;color:#00ff9d;letter-spacing:4px}
+.boot-center{position:relative;z-index:2;width:min(420px,78vw);text-align:center}
+.boot-shield{width:180px;height:210px;margin:auto;position:relative;filter:drop-shadow(0 0 18px rgba(0,255,157,.32));animation:shieldBuild 1.2s ease .7s both}
+.boot-shield svg{width:100%;height:100%}
+.shield-outline,.shield-inner{fill:rgba(0,255,157,.035);stroke:#00ff9d;stroke-width:3;stroke-dasharray:520;stroke-dashoffset:520;animation:drawShield 1.4s cubic-bezier(.2,.8,.2,1) .8s forwards}
+.shield-inner{stroke:#00d9ff;stroke-width:1.5;stroke-dasharray:430;stroke-dashoffset:430;animation-delay:1.35s}
+.shield-check{fill:none;stroke:#00ff9d;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100;animation:drawCheck .55s ease 2.25s forwards}
+.core-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 10px #00ff9d,0 0 35px #00ff9d;left:calc(50% - 5px);top:calc(50% - 5px);opacity:0;animation:coreOn .5s ease 2.65s forwards,pulseCore 1.4s ease 3.1s infinite}
+.boot-title{margin-top:-5px;font-size:32px;font-weight:900;letter-spacing:7px;opacity:0;transform:translateY(8px);animation:titleIn .7s ease 2.65s forwards}
+.boot-title span{color:#00ff9d}
+.boot-status{margin-top:12px;font:700 11px monospace;letter-spacing:2px;color:#65a8b5;min-height:14px;opacity:0;animation:fadeIn .5s 3.25s forwards}
+.boot-progress{height:2px;background:#12242c;margin:18px auto 0;width:240px;overflow:hidden;opacity:0;animation:fadeIn .4s 3.3s forwards}
+.boot-progress i{display:block;height:100%;width:0;background:#00ff9d;box-shadow:0 0 12px #00ff9d;animation:progress 3.5s linear 3.35s forwards}
+.boot-events{position:absolute;left:28px;bottom:60px;width:250px;font:10px/1.8 monospace;color:#55727d}
+.boot-events div{opacity:0;animation:eventIn .3s forwards}
+.boot-particles{position:absolute;inset:-70px;pointer-events:none}
+.boot-particles i{position:absolute;width:3px;height:3px;background:#00ff9d;border-radius:50%;box-shadow:0 0 8px #00ff9d;animation:particleIn 1.8s ease forwards}
+@keyframes drawShield{to{stroke-dashoffset:0}}@keyframes drawCheck{to{stroke-dashoffset:0}}@keyframes shieldBuild{from{transform:scale(.72);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes coreOn{to{opacity:1}}@keyframes pulseCore{50%{transform:scale(1.8);box-shadow:0 0 16px #00ff9d,0 0 55px #00ff9d}}
+@keyframes titleIn{to{opacity:1;transform:none}}@keyframes fadeIn{to{opacity:1}}@keyframes progress{to{width:100%}}
+@keyframes particleIn{0%{transform:translate(var(--x),var(--y)) scale(1);opacity:0}35%{opacity:1}100%{transform:translate(0,0) scale(.2);opacity:0}}
+@keyframes gridMove{to{transform:perspective(500px) rotateX(62deg) translateY(5%)}}
+@keyframes eventIn{to{opacity:1}}
+@keyframes bootFade{to{opacity:0;visibility:hidden;pointer-events:none}}
+@media(max-width:600px){.boot-top,.boot-bottom{left:15px;right:15px}.boot-events{left:15px}.boot-title{font-size:24px;letter-spacing:5px}.boot-shield{transform:scale(.85)}}
+@media(prefers-reduced-motion:reduce){.cyber-boot{animation:none}.cyber-boot{display:none!important}}
+</style>
+<script id="cyber-intro-script">
+(function(){
+  var BOOT_KEY='cybershieldBooted';
+
+  function skipBootInstantly(){
+    var el=document.getElementById('cyberBoot');
+    if(el)el.classList.add('hidden');
+  }
+
+  // If we've already shown the intro once this browser session (tab),
+  // don't show it again when the user comes back to this page.
+  if(sessionStorage.getItem(BOOT_KEY)==='1'){
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',skipBootInstantly);
+    }else{
+      skipBootInstantly();
+    }
+  }
+
+  function boot(){
+    const el=document.getElementById('cyberBoot'), ps=document.getElementById('bootParticles'),
+          events=document.getElementById('bootEvents'), status=document.getElementById('bootStatus');
+    if(!el)return;
+
+    if(sessionStorage.getItem(BOOT_KEY)==='1')return;
+    sessionStorage.setItem(BOOT_KEY,'1');
+
+    for(let i=0;i<34;i++){
+      const d=document.createElement('i'), a=Math.random()*Math.PI*2, r=160+Math.random()*230;
+      d.style.setProperty('--x',Math.cos(a)*r+'px'); d.style.setProperty('--y',Math.sin(a)*r+'px');
+      d.style.left=(50+Math.random()*8-4)+'%'; d.style.top=(50+Math.random()*8-4)+'%';
+      d.style.animationDelay=(.25+Math.random()*2.3)+'s'; ps.appendChild(d);
+    }
+    const msgs=['SECURITY CORE ........ ONLINE','THREAT ENGINE ........ READY','ANALYSIS MODULE ...... READY','DEFENSE LAYER ........ ACTIVE'];
+    msgs.forEach((m,i)=>{const d=document.createElement('div');d.textContent='> '+m;d.style.animationDelay=(3.35+i*.55)+'s';events.appendChild(d)});
+    const states=['INITIALIZING SECURITY CORE','LOADING DEFENSE MODULES','VERIFYING SECURITY LAYERS','ALL SYSTEMS OPERATIONAL'];
+    states.forEach((m,i)=>setTimeout(()=>{if(status)status.textContent=m},900+i*900));
+    setTimeout(()=>{el.classList.add('hidden')},8700);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+
+  // Handle back/forward navigation restored straight from the browser's
+  // cache (bfcache) - in that case no new load events fire, so make sure
+  // the splash isn't left sitting on screen.
+  window.addEventListener('pageshow',function(e){
+    if(e.persisted){
+      skipBootInstantly();
+    }
+  });
+})();
+</script>
+
+<div aria-modal="true" class="device-choice" id="deviceChoice" role="dialog">
+<div class="device-choice-box">
+<div class="device-choice-icon">🛡️</div>
+<h2>Welcome to CyberShield</h2>
+<p>Where are you using CyberShield?</p>
+<div class="device-options">
+<button class="device-option" onclick="chooseDevice('mobile')" type="button">
+<svg aria-hidden="true" class="device-option-icon" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<rect height="50" rx="5" stroke="#00d9ff" stroke-width="3" width="28" x="18" y="7"></rect>
+<path d="M27 13H37" stroke="#00ff9d" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="32" cy="50" fill="#00ff9d" r="2"></circle>
+</svg>
+<span>Mobile</span>
+</button>
+<button class="device-option" onclick="chooseDevice('desktop')" type="button">
+<svg aria-hidden="true" class="device-option-icon" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<rect height="34" rx="4" stroke="#00d9ff" stroke-width="3" width="48" x="8" y="10"></rect>
+<path d="M25 54H39" stroke="#00ff9d" stroke-linecap="round" stroke-width="3"></path>
+<path d="M32 44V54" stroke="#00ff9d" stroke-linecap="round" stroke-width="3"></path>
+<path d="M20 36L27 29L32 34L42 23" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+<span>Desktop</span>
+</button>
+</div>
+<p class="device-choice-note">
+            This choice controls which tools are shown on your dashboard.
+        </p>
+</div>
+</div>
+<div class="wrap">
+<div class="top">
+<button aria-label="Open menu" class="menu-button" onclick="toggleMenu()" type="button">
+<svg aria-hidden="true" fill="none" height="26" viewbox="0 0 24 24" width="26" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 7H20" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M4 12H20" stroke="#00ff9d" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M4 17H20" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</button>
+<div class="logo">
+    🛡️ Cyber<span>Shield</span>
+</div>
+<div class="small">UNBREAKABLE</div>
+</div>
+<!-- Hamburger Menu -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<aside aria-label="CyberShield navigation" class="side-menu" id="sideMenu">
+<div class="side-menu-header">
+<div>
+<div class="side-menu-title">CyberShield</div>
+<div class="side-menu-subtitle">SECURITY CENTER</div>
+</div>
+<button aria-label="Close menu" class="menu-close" onclick="closeMenu()" type="button">
+            ×
+        </button>
+</div>
+<div class="side-menu-divider"></div>
+<nav class="side-menu-nav">
+<button class="side-menu-item active" onclick="menuGoHome()" type="button">
+<span class="side-menu-icon">⌂</span>
+<span>
+<strong>Dashboard</strong>
+<small>Security overview</small>
+</span>
+</button>
+<button class="side-menu-item" onclick="menuGoToLookalike()" type="button">
+<span class="side-menu-icon"><svg viewBox="0 0 64 64" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<rect x="8" y="16" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3"></rect>
+<path d="M8 24H42" stroke="currentColor" stroke-width="2.5"></path>
+<circle cx="14" cy="20" r="1.6" fill="currentColor"></circle>
+<rect x="20" y="26" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3" opacity=".55"></rect>
+<path d="M20 34H54" stroke="currentColor" stroke-width="2.5" opacity=".55"></path>
+<circle cx="26" cy="30" r="1.6" fill="currentColor" opacity=".55"></circle>
+</svg></span>
+<span>
+<strong>Lookalike Dashboard</strong>
+<small>Domain impersonation detections</small>
+</span>
+</button>
+<button class="side-menu-item" onclick="menuGoTo('guardian-alert.html')" type="button">
+<span class="side-menu-icon">GA</span>
+<span><strong>Guardian Alert</strong><small>Open Guardian safety controls</small></span>
+</button>
+<button class="side-menu-item" onclick="menuGoTo('log-analyzer.html')" type="button">
+<span class="side-menu-icon">▤</span>
+<span>
+<strong>Log Analyzer</strong>
+<small>Analyze security logs</small>
+</span>
+</button>
+<button class="side-menu-item" id="tapShieldMenuItem" onclick="menuGoTo('tapshield.html')" type="button">
+<span class="side-menu-icon">◎</span>
+<span>
+<strong>Tap Shield</strong>
+<small>Detect overlay tap attacks</small>
+</span>
+</button>
+<button class="side-menu-item" onclick="menuGoTo('qr-shield.html')" type="button">
+<span class="side-menu-icon">QR</span>
+<span>
+<strong>QR Shield</strong>
+<small>Scan QR codes before opening</small>
+</span>
+</button>
+<button class="side-menu-item" onclick="menuGoTo('breach-checker.html')" type="button">
+<span class="side-menu-icon">BR</span>
+<span>
+<strong>Breach Checker</strong>
+<small>Check for exposed emails</small>
+</span>
+</button>
+<button class="side-menu-item" onclick="menuGoTo('fraudguard.html')" type="button">
+<span class="side-menu-icon">FG</span>
+<span>
+<strong>FraudGuard</strong>
+<small>Scan transactions for fraud</small>
+</span>
+</button>
+<button class="side-menu-item" onclick="menuGoTo('incident-response.html')" type="button"><span class="side-menu-icon">RT</span><span><strong>Response Tool</strong><small>Review security responses</small></span></button><button class="side-menu-item" onclick="menuGoTo('rat-guard.html')" type="button"><span class="side-menu-icon">RG</span><span><strong>RatGuard</strong><small>Review malware indicators</small></span></button><button class="side-menu-item" onclick="openDeviceMode()" type="button">
+<span class="side-menu-icon">⚙</span>
+<span>
+<strong>Device Mode</strong>
+<small id="menuDeviceMode">Loading...</small>
+</span>
+</button>
+</nav>
+<div class="side-menu-divider"></div>
+<button class="side-menu-item" onclick="showAboutCyberShield()" type="button">
+<span class="side-menu-icon">ⓘ</span>
+<span>
+<strong>About CyberShield</strong>
+<small>About this app</small>
+</span>
+</button>
+</aside>
+<!-- About CyberShield Modal -->
+<div aria-hidden="true" class="about-modal" id="aboutModal" onclick="closeAboutModal(event)">
+<div class="about-card" onclick="event.stopPropagation()">
+<div class="about-icon">
+            🛡️
+        </div>
+<div class="about-title">
+            CyberShield
+        </div>
+<div class="about-subtitle">
+            SECURITY CENTER
+        </div>
+<div class="about-divider"></div>
+<p class="about-text">A local security toolkit for link protection, log analysis, security response, QR review, and malware indicator analysis.</p>
+<div class="about-mode">
+<span>DEVICE MODE</span>
+<strong id="aboutDeviceMode">Mobile</strong>
+</div>
+<button class="about-close" onclick="closeAboutModal()" type="button">
+            CLOSE
+        </button>
+</div>
+</div>
+<style>
+.scan-banner{display:flex;align-items:center;gap:14px;width:calc(100% - 32px);max-width:960px;margin:14px auto 0;padding:16px 16px 16px 18px;box-sizing:border-box;text-decoration:none;color:#f5f7fa;background:linear-gradient(135deg,#073247 0%,#071321 70%);border:1px solid #11627a;border-radius:18px;box-shadow:0 0 0 1px rgba(0,217,255,.12),0 10px 30px rgba(0,0,0,.35);-webkit-tap-highlight-color:transparent}
+.scan-banner .sb-icon{flex:none;width:46px;height:46px;border-radius:13px;background:#06182a;border:1px solid #11627a;display:flex;align-items:center;justify-content:center}
+.scan-banner .sb-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.scan-banner strong{font-size:17px;font-weight:800}
+.scan-banner small{font-size:13px;line-height:1.4;color:#9fb4c8}
+.scan-banner .sb-go{flex:none;padding:11px 18px;border-radius:11px;background:#00ff9d;color:#00130b;font-size:14px;font-weight:800}
+.scan-banner:focus-visible{outline:2px solid #00d9ff;outline-offset:3px}
+</style>
+<a class="scan-banner" id="scanBanner" href="scan.html" aria-label="Scan your phone for security risks">
+<span class="sb-icon"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 64 64" fill="none"><path d="M32 8L12 16V30C12 43 20 53 32 58C44 53 52 43 52 30V16L32 8Z" fill="#081a29" stroke="#00d9ff" stroke-width="3.5" stroke-linejoin="round"/><path d="M22 32L29 39L43 24" stroke="#00ff9d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+<span class="sb-text"><strong>Scan your phone</strong><small>Check your settings and apps for security risks</small></span>
+<span class="sb-go">Scan</span>
+</a>
+<section class="hero">
+<div class="badge">🔗 INCOMING LINK PROTECTION</div>
+<h1>Your Cyber <span>Safety Center</span></h1>
+<p>Detect URLs inside incoming notifications, check for obvious red flags, and analyze security logs.</p>
+</section>
+<div class="tool-section">
+<h2 class="tool-heading">Main Tools</h2>
+<div class="grid">
+<div class="card" id="linkShieldCard">
+<div class="icon">🛡️</div>
+<h2>Link Shield</h2>
+<p>Automatically detect URLs from incoming notifications.</p>
+<div class="shield-button-wrap">
+<button class="btn" id="notificationAccessButton" onclick="handleLinkShieldButton()" type="button">
+<span id="shieldButtonText">Enable Notification Access</span>
+<span aria-label="New link detected" class="shield-notify-dot" id="shieldNotifyDot"></span>
+</button>
+</div>
+</div>
+<div class="card">
+<div class="icon">
+<svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 52V12" stroke="#00d9ff" stroke-linecap="round" stroke-width="3"></path>
+<path d="M10 52H56" stroke="#00d9ff" stroke-linecap="round" stroke-width="3"></path>
+<path d="M18 43L27 33L35 39L50 20" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M43 20H50V27" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<path d="M20 52V44" stroke="#00d9ff" stroke-linecap="round" stroke-width="2"></path>
+<path d="M31 52V38" stroke="#00d9ff" stroke-linecap="round" stroke-width="2"></path>
+<path d="M42 52V31" stroke="#00d9ff" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<h2>Log Analyzer</h2>
+<p>Analyze security logs and detect suspicious activity.</p>
+<a class="btn" href="log-analyzer.html">Open Log Analyzer</a>
+</div>
+<div class="card" id="guardianAlertCard">
+<div class="icon">
+<svg aria-hidden="true" fill="none" height="42" viewBox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<path d="M32 7L12 15V29C12 42 20 52 32 57C44 52 52 42 52 29V15L32 7Z" fill="#081a29" stroke="#00d9ff" stroke-width="3"/>
+<path d="M32 20V35" stroke="#00ff9d" stroke-width="4" stroke-linecap="round"/>
+<circle cx="32" cy="44" r="2.5" fill="#00ff9d"/>
+<path d="M21 11L16 5M43 11L48 5" stroke="#00ff9d" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
+</div>
+<h2>Guardian Alert</h2>
+<p>Open Guardian Alert to review its safety controls and alert settings.</p>
+<a class="btn" href="guardian-alert.html">Open Guardian Alert</a>
+</div>
+<div class="card" id="tapShieldCard">
+<div class="icon">
+<svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<circle cx="32" cy="32" r="22" stroke="#00d9ff" stroke-width="3"></circle>
+<circle cx="32" cy="32" fill="#081a29" r="8" stroke="#00ff9d" stroke-width="2.5"></circle>
+<path d="M32 6V14" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M32 50V58" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M6 32H14" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M50 32H58" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<h2>Tap Shield</h2>
+<p>Detects tapjacking — invisible overlays that hijack your taps from other apps.</p>
+<a class="btn" href="tapshield.html">Open Tap Shield</a>
+</div>
+<div class="card">
+<div class="icon">
+<svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<rect height="32" rx="5" stroke="#00d9ff" stroke-width="3" width="48" x="8" y="16"></rect>
+<path d="M8 26H56" stroke="#00d9ff" stroke-width="3"></path>
+<path d="M16 38H28" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M40 30L46 33V38C46 42 43.5 44.5 40 46.5C36.5 44.5 34 42 34 38V33L40 30Z" fill="#081a29" stroke="#00ff9d" stroke-linejoin="round" stroke-width="2.5"></path>
+<path d="M37.5 38L39.3 39.8L42.5 36" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h2>FraudGuard</h2>
+<p>Scan a transaction log for fraud risk signals and suspicious activity.</p>
+<a class="btn" href="fraudguard.html">Open FraudGuard</a>
+</div>
+<div class="card"><div class="icon"><svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg"><rect height="38" rx="5" stroke="#00d9ff" stroke-width="3" width="48" x="8" y="12"></rect><path d="M18 24H46M18 32H38M18 40H32" stroke="#00ff9d" stroke-linecap="round" stroke-width="2.5"></path><path d="M44 36L50 42L56 34" stroke="#00d9ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg></div><h2>Response Tool</h2><p>Review security alerts and choose a clear, appropriate response.</p><a class="btn" href="incident-response.html">Open Response Tool</a></div></div>
+</div>
+<div class="tool-section">
+<h2 class="tool-heading">Security Utilities</h2>
+<div class="grid">
+<div class="card">
+<div class="icon">
+<svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<!-- QR corner patterns -->
+<rect height="16" rx="2" stroke="#00d9ff" stroke-width="3" width="16" x="9" y="9"></rect>
+<rect fill="#00ff9d" height="6" width="6" x="14" y="14"></rect>
+<rect height="16" rx="2" stroke="#00d9ff" stroke-width="3" width="16" x="39" y="9"></rect>
+<rect fill="#00ff9d" height="6" width="6" x="44" y="14"></rect>
+<rect height="16" rx="2" stroke="#00d9ff" stroke-width="3" width="16" x="9" y="39"></rect>
+<rect fill="#00ff9d" height="6" width="6" x="14" y="44"></rect>
+<!-- QR data blocks -->
+<rect fill="#00ff9d" height="6" width="6" x="39" y="39"></rect>
+<rect fill="#00d9ff" height="6" width="6" x="49" y="39"></rect>
+<rect fill="#00d9ff" height="6" width="6" x="39" y="49"></rect>
+<rect fill="#00ff9d" height="6" width="6" x="49" y="49"></rect>
+<!-- Shield -->
+<path d="M32 27L38 30V35C38 40 35 43 32 45C29 43 26 40 26 35V30L32 27Z" stroke="#00ff9d" stroke-linejoin="round" stroke-width="2.5"></path>
+<!-- Check mark -->
+<path d="M29 35L31 37L35 32" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h2>QR Shield</h2>
+<p>Upload a QR image and check its destination before opening it.</p>
+<a class="btn" href="qr-shield.html">Open QR Shield</a>
+</div>
+
+<div class="card">
+<div class="icon">
+<svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg">
+<circle cx="28" cy="28" r="16" stroke="#00d9ff" stroke-width="3"></circle>
+<path d="M39 39L54 54" stroke="#00d9ff" stroke-linecap="round" stroke-width="3"></path>
+<path d="M28 20V30" stroke="#00ff9d" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="28" cy="36" fill="#00ff9d" r="1.6"></circle>
+</svg>
+</div>
+<h2>Breach Checker</h2>
+<p>Check if your email address has appeared in a known data breach.</p>
+<a class="btn" href="breach-checker.html">Open Breach Checker</a>
+</div>
+<div class="card"><div class="icon"><svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg"><path d="M32 7L51 14V29C51 42 43 51 32 57C21 51 13 42 13 29V14L32 7Z" stroke="#00d9ff" stroke-linejoin="round" stroke-width="3"></path><path d="M22 31C25 26 29 23 34 24C39 25 42 29 42 34C42 39 38 43 33 43H27C23 43 20 40 20 36C20 34 21 32 22 31Z" fill="#081a29" stroke="#00ff9d" stroke-width="2.5"></path><circle cx="28" cy="33" fill="#00ff9d" r="2"></circle><circle cx="36" cy="33" fill="#00ff9d" r="2"></circle><path d="M30 38H34" stroke="#00d9ff" stroke-linecap="round" stroke-width="2"></path></svg></div><h2>RatGuard</h2><p>Review files and security indicators for signs of remote-access malware.</p><a class="btn" href="rat-guard.html">Open RatGuard</a></div>
+<div class="card" id="smsBombShieldCard"><div class="icon"><svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg"><rect height="38" rx="7" stroke="#00d9ff" stroke-width="3" width="30" x="17" y="8"></rect><path d="M27 40H37" stroke="#00d9ff" stroke-linecap="round" stroke-width="2.5"></path><path d="M32 27L38 30V35C38 40 35 43 32 45C29 43 26 40 26 35V30L32 27Z" fill="#081a29" stroke="#00ff9d" stroke-linejoin="round" stroke-width="2.5"></path><path d="M29 35L31 37L35 32" stroke="#00ff9d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M46 18L52 24" stroke="#ff4668" stroke-linecap="round" stroke-width="2.5"></path><path d="M46 24L52 18" stroke="#ff4668" stroke-linecap="round" stroke-width="2.5"></path></svg></div><h2>SMS Bomb Shield</h2><p>Stops SMS flooding by rate-limiting how many texts a number or device can trigger.</p><a class="btn" href="sms-bomb-shield.html">Open SMS Bomb Shield</a></div>
+<div class="card" id="honeypotCard"><div class="icon"><svg aria-hidden="true" fill="none" height="42" viewbox="0 0 64 64" width="42" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="46" fill="#081a29" rx="16" ry="9" stroke="#00d9ff" stroke-width="3"></ellipse><path d="M16 46V30C16 20 23 13 32 13C41 13 48 20 48 30V46" stroke="#00d9ff" stroke-linecap="round" stroke-width="3"></path><circle cx="26" cy="43" fill="#00ff9d" r="2.4"></circle><circle cx="38" cy="43" fill="#00ff9d" r="2.4"></circle><path d="M44 24L50 18" stroke="#ff4668" stroke-linecap="round" stroke-width="2.5"></path><path d="M46 30L53 28" stroke="#ff4668" stroke-linecap="round" stroke-width="2.5"></path></svg></div><h2>Honeypot Vault</h2><p>Plants fake decoy files in Downloads — no legitimate app has any reason to touch them, so tampering is a clean signal of scanning malware.</p><a class="btn" href="honeypot.html">Open Honeypot Vault</a></div>
+</div>
+</div>
+<div class="setup" id="setupPanel">
+<div class="setup-icon">✓</div>
+<h2>Link Shield is Ready</h2>
+<p>Notification Access has been successfully enabled. CyberShield is ready to inspect incoming notifications for URLs.</p>
+<div class="status-list">
+<div class="status-item"><span class="status-check">✓</span><span>Notification Access Enabled</span></div>
+<div class="status-item"><span class="status-check">✓</span><span>URL Detection Ready</span></div>
+<div class="status-item"><span class="status-check">✓</span><span>Local Link Analysis Ready</span></div>
+</div>
+<button class="btn" onclick="continueToLinkShield()">Continue to Link Shield</button>
+</div>
+<div class="dashboard" id="dashboard">
+<div class="dashboard-header">
+<div class="dashboard-title">
+<div class="dashboard-title-icon">🛡️</div>
+<div>
+<h2>Link Shield</h2>
+<div class="small">Real-time protection</div>
+</div>
+</div>
+<div class="active-status">
+<span class="active-dot"></span>PROTECTION ACTIVE
+</div>
+<button class="btn dashboard-refresh" id="refreshDashboardButton" onclick="refreshDashboard()" type="button">
+    Refresh Dashboard
+</button>
+</div>
+<div class="stats">
+<div class="stat stat-blue">
+<div class="stat-number" id="linksDetected">0</div>
+<div class="stat-label">Links Detected</div>
+</div>
+<div class="stat stat-red">
+<div class="stat-number" id="suspiciousCount">0</div>
+<div class="stat-label">Suspicious</div>
+</div>
+<div class="stat stat-yellow">
+<div class="stat-number" id="checkCount">0</div>
+<div class="stat-label">Needs Review</div>
+</div>
+<div class="stat stat-green">
+<div class="stat-number" id="safeCount">0</div>
+<div class="stat-label">Appears Safe</div>
+</div>
+</div>
+<div class="section-title">LATEST DETECTION</div>
+<div class="latest" id="latestDetection">
+<div class="latest-empty">🛡️ No links detected yet.<br/><span class="small">Link Shield is monitoring incoming notifications.</span></div>
+</div>
+<div class="section-title">RECENT ACTIVITY</div>
+<div class="activity-list" id="activityList">
+<div class="activity-empty">No recent activity.</div>
+</div>
+</div>
+<div class="dashboard" id="lookalikeDashboard" style="display:none;border-color:#ff4d6d;box-shadow:0 0 30px rgba(255,77,109,.10)">
+<div class="dashboard-header">
+<div class="dashboard-title">
+<div class="dashboard-title-icon" style="background:#2a0a12;border-color:#ff4d6d;color:#ff4d6d"><svg viewBox="0 0 64 64" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<rect x="8" y="16" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3"></rect>
+<path d="M8 24H42" stroke="currentColor" stroke-width="2.5"></path>
+<circle cx="14" cy="20" r="1.6" fill="currentColor"></circle>
+<rect x="20" y="26" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3" opacity=".55"></rect>
+<path d="M20 34H54" stroke="currentColor" stroke-width="2.5" opacity=".55"></path>
+<circle cx="26" cy="30" r="1.6" fill="currentColor" opacity=".55"></circle>
+</svg></div>
+<div>
+<h2>Lookalike Dashboard</h2>
+<div class="small">Domain impersonation detections</div>
+</div>
+</div>
+<div class="active-status" style="color:#ff4d6d">
+<span class="active-dot" style="background:#ff4d6d;box-shadow:0 0 10px rgba(255,77,109,.7)"></span>MONITORING
+</div>
+</div>
+<div class="stats">
+<div class="stat stat-red">
+<div class="stat-number" id="lookalikeCount">0</div>
+<div class="stat-label">Lookalikes Detected</div>
+</div>
+</div>
+<div class="section-title">LATEST LOOKALIKE DETECTION</div>
+<div class="latest" id="latestLookalikeDetection">
+<div class="latest-empty"><svg viewBox="0 0 64 64" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:-3px;margin-right:5px">
+<rect x="8" y="16" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3"></rect>
+<path d="M8 24H42" stroke="currentColor" stroke-width="2.5"></path>
+<circle cx="14" cy="20" r="1.6" fill="currentColor"></circle>
+<rect x="20" y="26" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3" opacity=".55"></rect>
+<path d="M20 34H54" stroke="currentColor" stroke-width="2.5" opacity=".55"></path>
+<circle cx="26" cy="30" r="1.6" fill="currentColor" opacity=".55"></circle>
+</svg>No lookalike domains detected yet.<br/><span class="small">Every link Link Shield checks is also compared against known brand domains.</span></div>
+</div>
+<div class="section-title">LOOKALIKE ACTIVITY</div>
+<div class="activity-list" id="lookalikeActivityList">
+<div class="activity-empty">No lookalike detections yet.</div>
+</div>
+</div>
+<div class="panel" id="panel">
+<h2>🚨 Latest Link Detection</h2>
+<div class="result" id="result"></div>
+</div>
+<div class="small" style="text-align:center;margin-top:25px">
+Notification text is inspected in memory only to extract URLs; this starter stores no message history.
+</div>
+</div>
+<script>
+function openSettings(){
+    if(window.CyberShieldAndroid){
+        CyberShieldAndroid.openNotificationSettings();
+    }else{
+        alert('Open Android Settings → Notifications → Notification access → CyberShield.');
+    }
+}
+
+function handleLinkShieldButton(){
+
+    const button=document.getElementById('notificationAccessButton');
+
+    if(!button)return;
+
+    if(button.dataset.enabled==='true'){
+        continueToLinkShield();
+    }else{
+        openSettings();
+    }
+}
+
+function updateNotificationAccessStatus(granted){
+
+    const button=document.getElementById('notificationAccessButton');
+    const buttonText=document.getElementById('shieldButtonText');
+    const setupPanel=document.getElementById('setupPanel');
+    const dashboard=document.getElementById('dashboard');
+
+    if(!button||!buttonText||!setupPanel||!dashboard)return;
+
+    if(granted){
+
+        button.dataset.enabled='true';
+
+        buttonText.textContent='Check Link Shield';
+
+        button.disabled=false;
+        button.style.opacity='1';
+        button.style.cursor='pointer';
+
+        setupPanel.style.display='block';
+
+    }else{
+
+        button.dataset.enabled='false';
+
+        buttonText.textContent='Enable Notification Access';
+
+        button.disabled=false;
+        button.style.opacity='1';
+        button.style.cursor='pointer';
+
+        setupPanel.style.display='none';
+        dashboard.style.display='none';
+    }
+}
+
+function checkNotificationAccess(){
+    if(window.CyberShieldAndroid){
+        try{
+            const granted=CyberShieldAndroid.isNotificationAccessGranted();
+            updateNotificationAccessStatus(granted);
+        }catch(e){
+            updateNotificationAccessStatus(false);
+        }
+    }else{
+        updateNotificationAccessStatus(false);
+    }
+}
+
+function continueToLinkShield(){
+
+    const dashboard =
+        document.getElementById('dashboard');
+
+    if(!dashboard)return;
+
+    const dot =
+        document.getElementById('shieldNotifyDot');
+
+    if(dot){
+        dot.classList.remove('show');
+    }
+
+    dashboard.style.display='block';
+
+    setTimeout(function(){
+
+        dashboard.scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+
+    },100);
+}
+
+
+function openLinkShieldDashboard(){
+
+    const dashboard =
+        document.getElementById('dashboard');
+
+    if(!dashboard){
+
+        setTimeout(
+            openLinkShieldDashboard,
+            300
+        );
+
+        return;
+    }
+
+    dashboard.style.display='block';
+
+    setTimeout(function(){
+
+        dashboard.scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+
+    },100);
+}
+
+function refreshDashboard(){
+
+    if(
+        window.CyberShieldAndroid &&
+        typeof window.CyberShieldAndroid.resetShieldState === 'function'
+    ){
+        window.CyberShieldAndroid.resetShieldState();
+    }
+}
+function clearShieldDashboard(){
+
+    const links=document.getElementById('linksDetected');
+    const suspicious=document.getElementById('suspiciousCount');
+    const check=document.getElementById('checkCount');
+    const safe=document.getElementById('safeCount');
+
+    const latest=document.getElementById('latestDetection');
+    const activity=document.getElementById('activityList');
+
+    if(links)links.textContent='0';
+    if(suspicious)suspicious.textContent='0';
+    if(check)check.textContent='0';
+    if(safe)safe.textContent='0';
+
+    if(latest){
+        latest.className='latest';
+        latest.innerHTML=
+            '<div class="latest-empty">🛡️ No links detected yet.<br><span class="small">Link Shield is monitoring incoming notifications.</span></div>';
+    }
+
+    if(activity){
+        activity.innerHTML=
+            '<div class="activity-empty">No recent activity.</div>';
+    }
+
+    const dot=document.getElementById('shieldNotifyDot');
+
+    if(dot){
+        dot.classList.remove('show');
+    }
+}
+
+function getStatusClass(status){
+    if(status==='SUSPICIOUS')return'suspicious';
+    if(status==='CHECK')return'check';
+    return'safe';
+}
+
+function getStatusIcon(status){
+    if(status==='SUSPICIOUS')return'🚨';
+    if(status==='CHECK')return'⚠️';
+    return'✓';
+}
+
+function escapeHtml(text){
+    return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+function updateLatestDetection(url,status,reason,time){
+    const latest=document.getElementById('latestDetection');
+    if(!latest)return;
+
+    latest.className='latest detection '+getStatusClass(status);
+
+    latest.innerHTML=
+        '<div class="detection-status">'+getStatusIcon(status)+' '+escapeHtml(status)+'</div>'+
+        '<div class="detection-url">'+escapeHtml(url)+'</div>'+
+        '<div class="detection-reason">'+escapeHtml(reason)+'</div>'+
+        '<div class="detection-time">'+escapeHtml(time)+'</div>';
+}
+
+function addRecentActivity(url,status,reason,time){
+    const activity=document.getElementById('activityList');
+    if(!activity)return;
+
+    const item=document.createElement('div');
+
+    item.className='activity-item';
+
+    item.innerHTML=
+        '<div class="activity-icon">'+getStatusIcon(status)+'</div>'+
+        '<div class="activity-info">'+
+        '<div class="activity-url">'+escapeHtml(url)+'</div>'+
+        '<div class="activity-status">'+escapeHtml(status)+'</div>'+
+        '</div>'+
+        '<div class="activity-time">'+escapeHtml(time)+'</div>';
+
+    if(activity.children.length===1&&activity.children[0].classList.contains('activity-empty')){
+        activity.innerHTML='';
+    }
+
+    activity.insertBefore(item,activity.firstChild);
+
+    while(activity.children.length>10){
+        activity.removeChild(activity.lastChild);
+    }
+	}
+	function showLinkResult(url,status,reason){
+
+    const dashboard=document.getElementById('dashboard');
+    const dot=document.getElementById('shieldNotifyDot');
+
+    const now=new Date().toLocaleTimeString([],{
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit'
+    });
+
+    const links=document.getElementById('linksDetected');
+    const suspicious=document.getElementById('suspiciousCount');
+    const check=document.getElementById('checkCount');
+    const safe=document.getElementById('safeCount');
+
+    if(links)links.textContent=Number(links.textContent||0)+1;
+
+    if(status==='SUSPICIOUS'&&suspicious)
+        suspicious.textContent=Number(suspicious.textContent||0)+1;
+
+    else if(status==='CHECK'&&check)
+        check.textContent=Number(check.textContent||0)+1;
+
+    else if(status==='APPEARS SAFE'&&safe)
+        safe.textContent=Number(safe.textContent||0)+1;
+
+    updateLatestDetection(url,status,reason,now);
+    addRecentActivity(url,status,reason,now);
+
+    if(dashboard)dashboard.style.display='block';
+
+    if(dot)dot.classList.add('show');
+}
+
+/* ---- Lookalike-domain detection (shared Link Shield engine) ---- */
+
+const KNOWN_BRAND_DOMAINS=[
+    "paypal.com","google.com","apple.com","icloud.com","amazon.com",
+    "microsoft.com","outlook.com","facebook.com","instagram.com",
+    "whatsapp.com","netflix.com","chase.com","bankofamerica.com",
+    "wellsfargo.com","linkedin.com","twitter.com","dropbox.com","github.com"
+];
+
+const CONFUSABLE_CHARS={
+    "а":"a","е":"e","о":"o","р":"p","с":"c","х":"x","у":"y","і":"i",
+    "ѕ":"s","ј":"j","ԁ":"d","ɡ":"g","һ":"h","ⅼ":"l","Ι":"I","Α":"A",
+    "Β":"B","Ε":"E","Ζ":"Z","Η":"H","Κ":"K","Μ":"M","Ν":"N","Ο":"O",
+    "Ρ":"P","Τ":"T","Υ":"Y","Χ":"X"
+};
+
+function levenshteinDistance(a,b){
+    const m=a.length,n=b.length;
+    const dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+    for(let i=0;i<=m;i++)dp[i][0]=i;
+    for(let j=0;j<=n;j++)dp[0][j]=j;
+    for(let i=1;i<=m;i++){
+        for(let j=1;j<=n;j++){
+            const cost=a[i-1]===b[j-1]?0:1;
+            dp[i][j]=Math.min(
+                dp[i-1][j]+1,
+                dp[i][j-1]+1,
+                dp[i-1][j-1]+cost
+            );
+        }
+    }
+    return dp[m][n];
+}
+
+function normalizeConfusableHost(host){
+    let out='';
+    let swapped=[];
+    for(let i=0;i<host.length;i++){
+        const ch=host[i];
+        if(CONFUSABLE_CHARS[ch]){
+            out+=CONFUSABLE_CHARS[ch];
+            swapped.push({index:i,from:ch,to:CONFUSABLE_CHARS[ch]});
+        }else{
+            out+=ch;
+        }
+    }
+    return{normalized:out,swapped:swapped};
+}
+
+function checkLookalikeDomain(host){
+
+    if(KNOWN_BRAND_DOMAINS.includes(host))return null;
+
+    const{normalized,swapped}=normalizeConfusableHost(host);
+
+    let best=null,bestDist=Infinity;
+
+    for(const domain of KNOWN_BRAND_DOMAINS){
+        const d=levenshteinDistance(normalized,domain);
+        if(d<bestDist){bestDist=d;best=domain;}
+    }
+
+    if(best&&bestDist>0&&bestDist<=2){
+
+        let detail;
+
+        if(swapped.length>0){
+            const s=swapped[0];
+            detail='Character '+(s.index+1)+' uses a lookalike letter from a different alphabet (looks like "'+s.to+'", but isn\'t).';
+        }else{
+            let diffIdx=0;
+            const len=Math.min(host.length,best.length);
+            while(diffIdx<len&&host[diffIdx]===best[diffIdx])diffIdx++;
+            detail='Difference starts around character '+(diffIdx+1)+' (e.g. a missing, extra, or swapped letter).';
+        }
+
+        return{matchedDomain:best,editDistance:bestDist,detail:detail};
+    }
+
+    return null;
+}
+
+/* ---- Shared Link Shield analysis engine (manual checks) ---- */
+/* Notification-detected links are analyzed natively in
+   LinkNotificationListener.java (same checks, kept in sync with
+   this file) since that runs even when this WebView isn't loaded.
+   It reports results here via window.showLinkResult(...) and, for
+   lookalike-domain matches, window.showLookalikeResult(...) too. */
+
+function analyzeUrl(url){
+
+    let status='CHECK';
+    let reason='Review the destination before opening it.';
+    let isLookalike=false;
+    let matchedDomain=null;
+
+    try{
+
+        const parsed=new URL(url);
+        const host=parsed.hostname.toLowerCase();
+
+        const lookalike=checkLookalikeDomain(host);
+
+        if(host.includes('xn--')){
+            status='SUSPICIOUS';
+            reason='Punycode domain detected. This can be used to create lookalike domains.';
+        }
+
+        else if(/^(\d{1,3}\.){3}\d{1,3}$/.test(host)){
+            status='SUSPICIOUS';
+            reason='Raw IP address used instead of a normal domain.';
+        }
+
+        else if(url.includes('@')){
+            status='SUSPICIOUS';
+            reason='The @ character can hide the real destination of a URL.';
+        }
+
+        else if(lookalike){
+            status='SUSPICIOUS';
+            isLookalike=true;
+            matchedDomain=lookalike.matchedDomain;
+            reason='This domain is '+lookalike.editDistance+' character'+(lookalike.editDistance>1?'s':'')+' away from '+lookalike.matchedDomain+'. '+lookalike.detail;
+        }
+
+        else if(parsed.port&&parsed.port!=='80'&&parsed.port!=='443'){
+            status='CHECK';
+            reason='The URL uses an unusual port. Verify the destination carefully.';
+        }
+
+        else if(host.split('.').length>=5){
+            status='CHECK';
+            reason='The domain contains many subdomains. Verify the actual domain carefully.';
+        }
+
+        else if(/%2f|%2e|%40|%3a/i.test(url)){
+            status='CHECK';
+            reason='Encoded URL characters were detected. Inspect the destination carefully.';
+        }
+
+        else if(/login|log-in|signin|sign-in|verify|verification|account|password|security|wallet|payment/i.test(url)){
+            status='CHECK';
+            reason='Security-sensitive keywords were found. Verify the domain before entering information.';
+        }
+
+        else if(parsed.protocol==='http:'){
+            status='CHECK';
+            reason='The link uses HTTP instead of HTTPS. Treat unknown links cautiously.';
+        }
+
+        else if(parsed.protocol==='https:'){
+            status='APPEARS SAFE';
+            reason='HTTPS is enabled, but HTTPS alone does not prove a site is safe.';
+        }
+
+    }catch(e){
+
+        status='SUSPICIOUS';
+        reason='The URL could not be parsed as a normal web address.';
+    }
+
+    return{status:status,reason:reason,isLookalike:isLookalike,matchedDomain:matchedDomain};
+}
+
+function updateLatestLookalikeDetection(url,reason,matchedDomain,time){
+
+    const latest=document.getElementById('latestLookalikeDetection');
+
+    if(!latest)return;
+
+    latest.className='latest detection suspicious';
+    latest.innerHTML=
+        '<div class="detection-status"><svg viewBox="0 0 64 64" width="17" height="17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:-3px;margin-right:6px">'+
+        '<rect x="8" y="16" width="34" height="24" rx="5" stroke="#ff4d6d" stroke-width="3"></rect>'+
+        '<path d="M8 24H42" stroke="#ff4d6d" stroke-width="2.5"></path>'+
+        '<circle cx="14" cy="20" r="1.6" fill="#ff4d6d"></circle>'+
+        '<rect x="20" y="26" width="34" height="24" rx="5" stroke="#ff4d6d" stroke-width="3" opacity=".55"></rect>'+
+        '<path d="M20 34H54" stroke="#ff4d6d" stroke-width="2.5" opacity=".55"></path>'+
+        '<circle cx="26" cy="30" r="1.6" fill="#ff4d6d" opacity=".55"></circle>'+
+        '</svg>LOOKALIKE DOMAIN</div>'+
+        '<div class="detection-url">'+escapeHtml(url)+'</div>'+
+        '<div class="detection-reason">'+escapeHtml(reason)+'</div>'+
+        '<div class="detection-time">'+escapeHtml(time)+'</div>';
+}
+
+function addLookalikeActivity(url,matchedDomain,time){
+
+    const activity=document.getElementById('lookalikeActivityList');
+
+    if(!activity)return;
+
+    const item=document.createElement('div');
+
+    item.className='activity-item';
+
+    item.innerHTML=
+        '<div class="activity-icon"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+        '<rect x="8" y="16" width="34" height="24" rx="5" stroke="#ff4d6d" stroke-width="3"></rect>'+
+        '<path d="M8 24H42" stroke="#ff4d6d" stroke-width="2.5"></path>'+
+        '<circle cx="14" cy="20" r="1.6" fill="#ff4d6d"></circle>'+
+        '<rect x="20" y="26" width="34" height="24" rx="5" stroke="#ff4d6d" stroke-width="3" opacity=".55"></rect>'+
+        '<path d="M20 34H54" stroke="#ff4d6d" stroke-width="2.5" opacity=".55"></path>'+
+        '<circle cx="26" cy="30" r="1.6" fill="#ff4d6d" opacity=".55"></circle>'+
+        '</svg></div>'+
+        '<div class="activity-info">'+
+        '<div class="activity-url">'+escapeHtml(url)+'</div>'+
+        '<div class="activity-status">Impersonates '+escapeHtml(matchedDomain||'a known domain')+'</div>'+
+        '</div>'+
+        '<div class="activity-time">'+escapeHtml(time)+'</div>';
+
+    if(activity.children.length===1&&activity.children[0].classList.contains('activity-empty')){
+        activity.innerHTML='';
+    }
+
+    activity.insertBefore(item,activity.firstChild);
+
+    while(activity.children.length>10){
+        activity.removeChild(activity.lastChild);
+    }
+}
+
+function showLookalikeResult(url,reason,matchedDomain){
+
+    const lookalikeDashboard=document.getElementById('lookalikeDashboard');
+    const count=document.getElementById('lookalikeCount');
+    const dot=document.getElementById('shieldNotifyDot');
+
+    const now=new Date().toLocaleTimeString([],{
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit'
+    });
+
+    if(count)count.textContent=Number(count.textContent||0)+1;
+
+    updateLatestLookalikeDetection(url,reason,matchedDomain,now);
+    addLookalikeActivity(url,matchedDomain,now);
+
+    if(lookalikeDashboard)lookalikeDashboard.style.display='block';
+
+    if(dot)dot.classList.add('show');
+}
+
+function clearLookalikeDashboard(){
+
+    const count=document.getElementById('lookalikeCount');
+    const latest=document.getElementById('latestLookalikeDetection');
+    const activity=document.getElementById('lookalikeActivityList');
+    const lookalikeDashboard=document.getElementById('lookalikeDashboard');
+
+    if(count)count.textContent='0';
+
+    if(latest){
+        latest.className='latest';
+        latest.innerHTML=
+            '<div class="latest-empty"><svg viewBox="0 0 64 64" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:-3px;margin-right:5px">'+
+            '<rect x="8" y="16" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3"></rect>'+
+            '<path d="M8 24H42" stroke="currentColor" stroke-width="2.5"></path>'+
+            '<circle cx="14" cy="20" r="1.6" fill="currentColor"></circle>'+
+            '<rect x="20" y="26" width="34" height="24" rx="5" stroke="currentColor" stroke-width="3" opacity=".55"></rect>'+
+            '<path d="M20 34H54" stroke="currentColor" stroke-width="2.5" opacity=".55"></path>'+
+            '<circle cx="26" cy="30" r="1.6" fill="currentColor" opacity=".55"></circle>'+
+            '</svg>No lookalike domains detected yet.<br><span class="small">Every link Link Shield checks is also compared against known brand domains.</span></div>';
+    }
+
+    if(activity){
+        activity.innerHTML=
+            '<div class="activity-empty">No lookalike detections yet.</div>';
+    }
+
+    if(lookalikeDashboard)lookalikeDashboard.style.display='none';
+}
+
+function openLookalikeDashboard(){
+
+    const lookalikeDashboard=
+        document.getElementById('lookalikeDashboard');
+
+    if(!lookalikeDashboard){
+        setTimeout(openLookalikeDashboard,300);
+        return;
+    }
+
+    lookalikeDashboard.style.display='block';
+
+    setTimeout(function(){
+
+        lookalikeDashboard.scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+
+    },100);
+}
+
+function menuGoToLookalike(){
+    closeMenu();
+    openLookalikeDashboard();
+}
+
+function manualCheck(){
+
+    const input=document.getElementById('manual');
+
+    if(!input)return;
+
+    const raw=input.value.trim();
+
+    if(!raw){
+        alert('Please enter a URL first.');
+        return;
+    }
+
+    let url=raw;
+
+    if(!/^https?:\/\//i.test(url))
+        url='https://'+url;
+
+    const analysis=analyzeUrl(url);
+
+    showLinkResult(url,analysis.status,analysis.reason);
+
+    if(analysis.isLookalike){
+        showLookalikeResult(url,analysis.reason,analysis.matchedDomain);
+    }
+}
+
+function applyDeviceMode(type){
+
+    const linkShieldCard =
+        document.getElementById('linkShieldCard');
+
+    if(linkShieldCard){
+
+        linkShieldCard.style.display =
+            type === 'desktop' ? 'none' : '';
+
+    }
+
+    const tapShieldCard =
+        document.getElementById('tapShieldCard');
+
+    if(tapShieldCard){
+
+        tapShieldCard.style.display =
+            type === 'desktop' ? 'none' : '';
+
+    }
+
+    const tapShieldMenuItem =
+        document.getElementById('tapShieldMenuItem');
+
+    if(tapShieldMenuItem){
+
+        tapShieldMenuItem.style.display =
+            type === 'desktop' ? 'none' : '';
+
+    }
+}
+
+
+function chooseDevice(type){
+
+    localStorage.setItem(
+        'cybershieldDeviceType',
+        type
+    );
+
+    applyDeviceMode(type);
+    updateMenuDeviceMode();
+	const choice =
+        document.getElementById('deviceChoice');
+
+    if(choice){
+        choice.classList.remove('show');
+    }
+}
+
+
+function setupDeviceMode(){
+
+    const savedType =
+        localStorage.getItem(
+            'cybershieldDeviceType'
+        );
+
+    if(
+        savedType === 'mobile' ||
+        savedType === 'desktop'
+    ){
+
+        applyDeviceMode(savedType);
+        updateMenuDeviceMode();
+        return;
+    }
+
+    const choice =
+        document.getElementById('deviceChoice');
+
+    if(choice){
+        choice.classList.add('show');
+    }
+}
+
+
+window.addEventListener('load',function(){
+
+    setupDeviceMode();
+
+    checkNotificationAccess();
+
+    if(window.location.hash==='#lookalike'){
+        openLookalikeDashboard();
+    }
+
+});
+
+document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible')
+ checkNotificationAccess();
+});
+function toggleMenu(){
+
+    const menu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('menuOverlay');
+
+    if(!menu || !overlay)return;
+
+    menu.classList.toggle('show');
+    overlay.classList.toggle('show');
+}
+
+
+function closeMenu(){
+
+    const menu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('menuOverlay');
+
+    if(!menu || !overlay)return;
+
+    menu.classList.remove('show');
+    overlay.classList.remove('show');
+}
+function menuGoHome(){
+
+    closeMenu();
+
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+
+function menuGoTo(page){
+
+    closeMenu();
+
+    window.location.href = page;
+}
+
+
+function openDeviceMode(){
+
+    closeMenu();
+
+    const choice =
+        document.getElementById('deviceChoice');
+
+    if(choice){
+        choice.classList.add('show');
+    }
+}
+function showAboutCyberShield(){
+
+    closeMenu();
+
+    const modal =
+        document.getElementById('aboutModal');
+
+    const mode =
+    localStorage.getItem('cybershieldDeviceType');
+
+    const modeLabel =
+        document.getElementById('aboutDeviceMode');
+
+    if(modeLabel){
+
+        if(mode === 'desktop'){
+            modeLabel.textContent = 'Desktop';
+        }
+        else{
+            modeLabel.textContent = 'Mobile';
+        }
+    }
+
+    if(modal){
+
+        modal.classList.add('show');
+
+        modal.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+    }
+}
+function closeAboutModal(event){
+
+    const modal =
+        document.getElementById('aboutModal');
+
+    if(modal){
+
+        modal.classList.remove('show');
+
+        modal.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+    }
+}
+
+function updateMenuDeviceMode(){
+
+    const mode =
+        localStorage.getItem('cybershieldDeviceType');
+
+    const label =
+    document.getElementById('menuDeviceMode');
+
+if(!label)return;
+
+    if(mode === 'mobile'){
+        label.textContent='Mobile';
+    }
+    else if(mode === 'desktop'){
+        label.textContent='Desktop';
+    }
+    else{
+        label.textContent='Not selected';
+    }
+}
+
+</script>
+</body>
+</html>

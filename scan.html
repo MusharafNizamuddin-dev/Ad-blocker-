@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phone Security Scan - CyberShield</title>
+<style>
+:root{--bg:#020914;--card:#071321;--line:#193047;--text:#f5f7fa;--muted:#8a9ab0;--ok:#00ff9d;--warn:#ffb020;--bad:#ff4668;--cyan:#00d9ff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Roboto,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px;margin:0 auto;padding:0 18px 56px}
+.top{display:flex;align-items:center;gap:14px;padding:20px 0;border-bottom:1px solid var(--line)}
+.back{width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--cyan);display:flex;align-items:center;justify-content:center;text-decoration:none}
+.top h1{margin:0;font-size:19px;font-weight:700}
+.top p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.hero{margin-top:20px;padding:26px 20px 22px;background:var(--card);border:1px solid var(--line);border-radius:22px;text-align:center}
+.ring{position:relative;width:196px;height:196px;margin:0 auto}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .track{stroke:#0d2236}
+.ring .arc{stroke:var(--ok);stroke-linecap:round;transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1),stroke .4s}
+.ring.scanning .arc{stroke:var(--cyan);stroke-dasharray:90 440;stroke-dashoffset:0;animation:spin 1.1s linear infinite;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.num{font-size:58px;font-weight:800;line-height:1;letter-spacing:-1px}
+.num small{font-size:16px;font-weight:600;color:var(--muted);letter-spacing:0}
+.verdict{margin:18px 0 4px;font-size:21px;font-weight:700}
+.summary{margin:0;font-size:14px;line-height:1.55;color:var(--muted)}
+.meta{margin:14px 0 0;font-size:12.5px;color:#66778c}
+.btn{display:block;width:100%;margin-top:18px;padding:15px;border:0;border-radius:12px;background:var(--ok);color:#00130b;font-size:15px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.5}
+.btn.ghost{background:transparent;color:var(--cyan);border:1px solid var(--line);margin-top:0;padding:11px 14px;width:auto;font-size:13.5px;font-weight:700;display:inline-block}
+h2{margin:30px 0 4px;font-size:15px;font-weight:700}
+h2 span{color:var(--muted);font-weight:500}
+.item{margin-top:10px;padding:16px;background:var(--card);border:1px solid var(--line);border-left-width:4px;border-radius:14px}
+.item.bad{border-left-color:var(--bad)}.item.warn{border-left-color:var(--warn)}.item.ok{border-left-color:var(--ok);padding:13px 16px}
+.head{display:flex;align-items:center;gap:10px}
+.ico{flex:none;width:22px;height:22px}
+.item h3{margin:0;font-size:15px;font-weight:700}
+.item p{margin:8px 0 0;font-size:13.5px;line-height:1.6;color:#aab8c9}
+.item.ok p{margin-top:4px;color:var(--muted);font-size:13px}
+.apps{margin:12px 0 0;padding:0;list-style:none}
+.apps li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid #12283d;font-size:14px}
+.apps li div{min-width:0}
+.apps b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apps i{display:block;font-style:normal;font-size:11.5px;color:#66778c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.actions{margin-top:12px}
+.msg{margin-top:24px;padding:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
+.foot{margin-top:28px;padding:14px 16px;background:#0a1a2b;border:1px solid var(--line);border-radius:12px;font-size:12.5px;line-height:1.6;color:#7b8ca1}
+.foot b{color:#c3cedb}
+button:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.ring .arc{transition:none}.ring.scanning .arc{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <div><h1>Phone Security Scan</h1><p>Checks your settings and apps. Nothing leaves your phone.</p></div>
+  </div>
+
+  <div class="hero">
+    <div class="ring scanning" id="ring">
+      <svg viewBox="0 0 200 200"><circle class="track" cx="100" cy="100" r="84" fill="none" stroke-width="14"/><circle class="arc" id="arc" cx="100" cy="100" r="84" fill="none" stroke-width="14" stroke-dasharray="528" stroke-dashoffset="528"/></svg>
+      <div class="center"><div class="num" id="num">--</div></div>
+    </div>
+    <div class="verdict" id="verdict">Ready to scan</div>
+    <p class="summary" id="summary">Tap the button to check your phone.</p>
+    <p class="meta" id="meta"></p>
+    <button class="btn" id="scanBtn" type="button">Scan my phone</button>
+  </div>
+
+  <div id="results"></div>
+
+  <div class="foot">
+    <b>What this can and can't do.</b> It checks phone settings and which apps hold risky access. It does not look inside other apps or find viruses by their code, so a good score means no warning signs, not a guarantee. It changes nothing: each fix button just opens the right Android settings screen.
+  </div>
+</div>
+
+<script>
+(function () {
+  var C = 528;
+  var API = window.CyberShieldAndroid;
+  var pendingFix = false, busy = false;
+  var COLORS = { good: "#00ff9d", attention: "#ffb020", risk: "#ff4668" };
+  var FIXES = {
+    security: "Open security settings", accessibility: "Open accessibility settings",
+    developer: "Open developer options", notifications: "Open notification access",
+    about: "Open software update", apps: "Open app settings"
+  };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function icon(status) {
+    var ns = "http://www.w3.org/2000/svg";
+    var s = document.createElementNS(ns, "svg");
+    s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("class", "ico"); s.setAttribute("fill", "none");
+    var c = document.createElementNS(ns, "circle");
+    c.setAttribute("cx", "12"); c.setAttribute("cy", "12"); c.setAttribute("r", "10");
+    var col = status === "ok" ? "#00ff9d" : (status === "warn" ? "#ffb020" : "#ff4668");
+    c.setAttribute("stroke", col); c.setAttribute("stroke-width", "2");
+    var p = document.createElementNS(ns, "path");
+    p.setAttribute("stroke", col); p.setAttribute("stroke-width", "2.4");
+    p.setAttribute("stroke-linecap", "round"); p.setAttribute("stroke-linejoin", "round");
+    p.setAttribute("d", status === "ok" ? "M7.5 12.5l3 3 6-6.5" : "M12 7v6M12 16.5v.5");
+    s.appendChild(c); s.appendChild(p);
+    return s;
+  }
+
+  function fixButton(target, label) {
+    var b = el("button", "btn ghost", label);
+    b.type = "button";
+    b.onclick = function () { pendingFix = true; API.openSecurityFix(target); };
+    return b;
+  }
+
+  function itemFor(chk) {
+    var box = el("div", "item " + chk.status);
+    var head = el("div", "head");
+    head.appendChild(icon(chk.status));
+    head.appendChild(el("h3", "", chk.title));
+    box.appendChild(head);
+    box.appendChild(el("p", "", chk.detail));
+
+    if (chk.apps && chk.apps.length) {
+      var ul = el("ul", "apps");
+      chk.apps.forEach(function (a) {
+        var li = el("li");
+        var d = el("div");
+        d.appendChild(el("b", "", a.name));
+        d.appendChild(el("i", "", a.pkg));
+        li.appendChild(d);
+        li.appendChild(fixButton("app:" + a.pkg, "Review"));
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
+
+    if (chk.fix && chk.status !== "ok" && !(chk.apps && chk.apps.length && chk.fix === "apps")) {
+      var act = el("div", "actions");
+      act.appendChild(fixButton(chk.fix, FIXES[chk.fix] || "Open settings"));
+      box.appendChild(act);
+    }
+    return box;
+  }
+
+  function countUp(to) {
+    var n = $("num"), start = null;
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) { n.textContent = to; return; }
+    function step(t) {
+      if (start === null) start = t;
+      var p = Math.min(1, (t - start) / 1100);
+      n.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function render(d) {
+    var ring = $("ring"), arc = $("arc"), col = COLORS[d.level] || COLORS.good;
+    ring.classList.remove("scanning");
+    arc.style.strokeDasharray = C;
+    arc.style.strokeDashoffset = C;
+    arc.style.stroke = col;
+    arc.getBoundingClientRect();
+    arc.style.strokeDashoffset = C * (1 - d.score / 100);
+    countUp(d.score);
+
+    var issues = d.checks.filter(function (c) { return c.status !== "ok"; });
+    issues.sort(function (a, b) { return (a.status === "bad" ? 0 : 1) - (b.status === "bad" ? 0 : 1); });
+    var oks = d.checks.filter(function (c) { return c.status === "ok"; });
+
+    var verdict = { good: "Your phone looks healthy", attention: "A few things need attention", risk: "Your phone is at risk" }[d.level];
+    $("verdict").textContent = verdict;
+    $("verdict").style.color = col;
+    $("summary").textContent = issues.length
+      ? issues.length + (issues.length === 1 ? " item needs" : " items need") + " your attention. Start with the red ones."
+      : "No warning signs found in " + d.checks.length + " checks.";
+    $("meta").textContent = d.device + "  |  Android " + d.android + "  |  " + d.appsScanned + " apps checked";
+
+    var out = $("results");
+    out.textContent = "";
+    if (issues.length) {
+      var h = el("h2", "", "Needs attention "); h.appendChild(el("span", "", "(" + issues.length + ")"));
+      out.appendChild(h);
+      issues.forEach(function (c) { out.appendChild(itemFor(c)); });
+    }
+    if (oks.length) {
+      var h2 = el("h2", "", "All clear "); h2.appendChild(el("span", "", "(" + oks.length + ")"));
+      out.appendChild(h2);
+      oks.forEach(function (c) { out.appendChild(itemFor(c)); });
+    }
+    $("scanBtn").textContent = "Scan again";
+  }
+
+  function showMessage(text) {
+    $("ring").classList.remove("scanning");
+    $("num").textContent = "--";
+    $("verdict").textContent = "Scan unavailable";
+    $("verdict").style.color = "";
+    $("summary").textContent = text;
+    $("meta").textContent = "";
+  }
+
+  function scan() {
+    if (busy) return;
+    if (!API || typeof API.runSecurityScan === "undefined") {
+      showMessage("This scan only works inside the CyberShield app, because a web page cannot see your phone's settings.");
+      return;
+    }
+    busy = true;
+    var ring = $("ring");
+    ring.classList.add("scanning");
+    $("arc").style.strokeDasharray = "";
+    $("arc").style.strokeDashoffset = "";
+    $("arc").style.stroke = "";
+    $("num").textContent = "--";
+    $("verdict").textContent = "Checking your phone";
+    $("verdict").style.color = "";
+    $("summary").textContent = "Reading settings and installed apps. This takes a few seconds.";
+    $("scanBtn").disabled = true;
+
+    setTimeout(function () {
+      try {
+        render(JSON.parse(API.runSecurityScan()));
+      } catch (e) {
+        showMessage("Something went wrong while scanning. Close the app, open it again and retry.");
+      }
+      busy = false;
+      $("scanBtn").disabled = false;
+    }, 600);
+  }
+
+  $("scanBtn").onclick = scan;
+
+  /* Come back from a settings screen after fixing something: re-scan automatically. */
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && pendingFix) { pendingFix = false; scan(); }
+  });
+  window.addEventListener("focus", function () {
+    if (pendingFix) { pendingFix = false; scan(); }
+  });
+})();
+</script>
+</body>
+</html>

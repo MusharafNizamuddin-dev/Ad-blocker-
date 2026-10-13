@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Honeypot Vault • CyberShield</title>
+<style>
+*{box-sizing:border-box}
+*{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;-webkit-user-select:none;}
+body{margin:0;background:#020914;color:#f5f7fa;font-family:Segoe UI,Arial,sans-serif}
+.wrap{max-width:650px;margin:auto;padding:0 20px 50px}
+.top{display:flex;align-items:center;gap:14px;padding:22px 0;border-bottom:1px solid #17283a}
+.back{width:42px;height:42px;border:1px solid #193047;border-radius:10px;background:#071321;color:#00d9ff;font-size:20px;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0}
+.title{font-size:20px;font-weight:800}
+.small{color:#7f8da0;font-size:13px}
+p{color:#9eacbf;line-height:1.7}
+.card{background:#071321;border:1px solid #193047;border-radius:20px;padding:27px;margin-top:22px}
+.section-title{font-size:12px;font-weight:900;letter-spacing:1px;color:#7f8da0;margin:0 0 14px}
+.status-wrap{text-align:center}
+.status-pill{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:30px;border:1px solid #00ff9d;background:#06261b;color:#00ff9d;font-weight:800;font-size:14px}
+.status-pill.alert{border-color:#ff4668;background:#2a0d13;color:#ff4668}
+.status-pill.neutral{border-color:#7f8da0;background:#0a1420;color:#9eacbf}
+.file-list{margin-top:16px;text-align:left}
+.file-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;margin-bottom:8px;background:#020914;border:1px solid #193047;border-radius:10px;font-size:13px}
+.file-name{font-weight:700}
+.state-pill{font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:4px 10px;border-radius:20px}
+.state-intact{background:#06261b;color:#00ff9d;border:1px solid #00ff9d}
+.state-modified{background:#2a1d0a;color:#ffb020;border:1px solid #ffb020}
+.state-deleted{background:#2a0d13;color:#ff4668;border:1px solid #ff4668}
+.log-list{margin-top:4px}
+.log-item{display:flex;justify-content:space-between;padding:11px 14px;margin-bottom:8px;background:#020914;border:1px solid #193047;border-radius:10px;font-size:13px}
+.log-empty{color:#718095;font-size:13px;text-align:center;padding:16px 0}
+.btn{width:100%;display:inline-block;margin-top:16px;padding:14px 20px;border-radius:10px;background:#00ff9d;color:#00130b;font-weight:800;border:0;text-decoration:none;cursor:pointer;font-size:15px;text-align:center}
+.btn.secondary{background:#061a2a;color:#00d9ff;border:1px solid #00d9ff}
+.note{margin-top:14px;padding:14px 16px;border-radius:12px;background:#0a1a2b;border:1px solid #193047;font-size:12.5px;color:#7f8da0;line-height:1.6}
+button,
+button:focus,
+button:active,
+a,
+a:focus,
+a:active{
+    outline:none !important;
+    -webkit-tap-highlight-color:transparent !important;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+<a class="back" href="index.html">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</a>
+<div>
+<div class="title">Honeypot Vault</div>
+<div class="small">Bait files that catch snoopers in the act</div>
+</div>
+</div>
+
+<p>
+Instead of guessing which permissions are dangerous, this plants fake "juicy" files —
+a bank backup, a crypto seed phrase, a password export — in your Downloads folder.
+They contain zero real data. No legitimate app has any reason to ever touch them, so if
+anything modifies, renames, or deletes one, that's a clean, low-noise signal something
+scanned your storage looking for exactly this kind of file.
+</p>
+
+<div class="card status-wrap">
+<div class="section-title" style="justify-content:center">HONEYPOT STATUS</div>
+<div id="statusPill" class="status-pill neutral">Not Deployed</div>
+<button class="btn" id="deployBtn" onclick="deployHoneypot()">Deploy Honeypot Files</button>
+<button class="btn secondary" onclick="refreshStatus()">Check Now</button>
+</div>
+
+<div class="card">
+<div class="section-title">DECOY FILES</div>
+<div id="fileList" class="file-list">
+<div class="log-empty">No decoy files deployed yet.</div>
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">TRIGGER LOG</div>
+<div id="logList" class="log-list">
+<div class="log-empty">No triggers yet.</div>
+</div>
+</div>
+
+<div class="note">
+Honest limits: this reliably catches a file being <strong>changed, renamed, or deleted</strong> —
+exactly what ransomware and cleanup-after-theft malware actually do. It can't catch a silent
+read with certainty; Android doesn't give any regular app a way to see "another app merely
+opened this file," so a scanner that only copies the bytes and leaves the file untouched
+won't trip this. Requires Android 10 or higher. Want to test it yourself? Deploy, then open
+your Files app and rename or delete one of the decoy files — come back here and tap
+"Check Now."
+</div>
+
+</div>
+
+<script>
+function escHtml(text){
+    return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtTime(ms){
+    try{ return new Date(ms).toLocaleString(); }catch(e){ return ''; }
+}
+
+function renderFiles(files){
+    const list=document.getElementById('fileList');
+    if(!list)return;
+    if(!files||files.length===0){
+        list.innerHTML='<div class="log-empty">No decoy files deployed yet.</div>';
+        return;
+    }
+    list.innerHTML='';
+    for(let i=0;i<files.length;i++){
+        const f=files[i];
+        const item=document.createElement('div');
+        item.className='file-item';
+        item.innerHTML=
+            '<span class="file-name">'+escHtml(f.name)+'</span>'+
+            '<span class="state-pill state-'+f.state+'">'+f.state.toUpperCase()+'</span>';
+        list.appendChild(item);
+    }
+}
+
+function renderLog(log){
+    const list=document.getElementById('logList');
+    if(!list)return;
+    if(!log||log.length===0){
+        list.innerHTML='<div class="log-empty">No triggers yet.</div>';
+        return;
+    }
+    list.innerHTML='';
+    for(let i=log.length-1;i>=0;i--){
+        const e=log[i];
+        const item=document.createElement('div');
+        item.className='log-item';
+        item.innerHTML=
+            '<span style="font-weight:800">'+escHtml(e.name)+' — '+escHtml(e.type)+'</span>'+
+            '<span style="color:#718095">'+fmtTime(e.time)+'</span>';
+        list.appendChild(item);
+    }
+}
+
+function setStatusPill(status){
+    const pill=document.getElementById('statusPill');
+    if(!pill)return;
+    if(status==='triggered'){
+        pill.className='status-pill alert';
+        pill.textContent='⚠ Triggered — a decoy file was tampered with';
+    }else if(status==='armed'){
+        pill.className='status-pill';
+        pill.textContent='Armed — all decoys intact';
+    }else if(status==='not_deployed'){
+        pill.className='status-pill neutral';
+        pill.textContent='Not Deployed';
+    }else{
+        pill.className='status-pill neutral';
+        pill.textContent='Status unavailable';
+    }
+}
+
+function refreshStatus(){
+    try{
+        if(!window.CyberShieldAndroid
+            || typeof window.CyberShieldAndroid.getHoneypotStatus!=='function'){
+            return;
+        }
+        const raw=window.CyberShieldAndroid.getHoneypotStatus();
+        const data=JSON.parse(raw||'{}');
+        setStatusPill(data.status);
+        renderFiles(data.files||[]);
+        renderLog(data.log||[]);
+    }catch(e){
+        console.log('Could not load Honeypot status.');
+    }
+}
+
+function deployHoneypot(){
+    try{
+        if(!window.CyberShieldAndroid
+            || typeof window.CyberShieldAndroid.deployHoneypot!=='function'){
+            return;
+        }
+        window.CyberShieldAndroid.deployHoneypot();
+        setTimeout(refreshStatus,300);
+    }catch(e){
+        console.log('Could not deploy honeypot.');
+    }
+}
+
+window.addEventListener('load',refreshStatus);
+</script>
+</body>
+</html>

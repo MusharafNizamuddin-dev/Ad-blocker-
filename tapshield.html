@@ -1,0 +1,441 @@
+<!doctype html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tap Shield • CyberShield</title><style>
+*{box-sizing:border-box}
+*{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;-webkit-user-select:none;}
+
+body{
+    margin:0;
+    background:#020914;
+    color:#f5f7fa;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+.wrap{
+    max-width:850px;
+    margin:auto;
+    padding:0 20px 50px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 0;
+    border-bottom:1px solid #17283a;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#00ff9d;
+}
+
+.small{
+    color:#7f8da0;
+    font-size:13px;
+}
+
+.hero{
+    text-align:center;
+    padding:45px 10px 30px;
+}
+
+.badge{
+    display:inline-block;
+    border:1px solid #00d9ff;
+    color:#00d9ff;
+    border-radius:30px;
+    padding:9px 17px;
+    font-weight:700;
+    font-size:13px;
+}
+
+h1{
+    font-size:43px;
+    line-height:1.1;
+    margin:20px 0 14px;
+}
+
+h1 span{
+    color:#00d9ff;
+}
+
+p{
+    color:#9eacbf;
+    line-height:1.7;
+}
+
+.card{
+    background:#071321;
+    border:1px solid #193047;
+    border-radius:20px;
+    padding:28px;
+    text-align:center;
+    margin-top:20px;
+}
+
+.status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 20px;
+    border-radius:30px;
+    border:1px solid #00ff9d;
+    background:#06261b;
+    color:#00ff9d;
+    font-weight:800;
+    font-size:14px;
+}
+
+.status-pill svg{
+    flex-shrink:0;
+}
+
+.status-pill.alert{
+    border-color:#ff4668;
+    background:#2a0d13;
+    color:#ff4668;
+}
+
+
+.stat-row{
+    display:flex;
+    gap:14px;
+    margin-top:22px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.stat-box{
+    flex:1;
+    min-width:130px;
+    background:#020914;
+    border:1px solid #193047;
+    border-radius:14px;
+    padding:16px;
+}
+
+.stat-num{
+    font-size:26px;
+    font-weight:900;
+    color:#00d9ff;
+}
+
+.stat-label{
+    font-size:11px;
+    letter-spacing:.6px;
+    color:#718095;
+    margin-top:4px;
+}
+
+.explain{
+    text-align:left;
+}
+
+.explain h3{
+    margin:0 0 10px;
+    font-size:17px;
+}
+
+.explain ul{
+    padding-left:20px;
+    margin:10px 0;
+}
+
+.explain li{
+    color:#9eacbf;
+    line-height:1.7;
+    margin-bottom:6px;
+}
+
+.log-list{
+    margin-top:18px;
+    text-align:left;
+    max-height:320px;
+    overflow-y:auto;
+}
+
+.log-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 14px;
+    margin-bottom:8px;
+    background:#020914;
+    border:1px solid #193047;
+    border-radius:10px;
+    font-size:13px;
+}
+
+.log-empty{
+    color:#718095;
+    font-size:13px;
+    text-align:center;
+    padding:20px 0;
+}
+
+.log-type{
+    font-weight:800;
+}
+
+.log-type.full{
+    color:#ff4668;
+}
+
+.log-type.partial{
+    color:#ffb020;
+}
+
+.log-time{
+    color:#718095;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:18px;
+    padding:13px 20px;
+    border-radius:10px;
+    background:#00ff9d;
+    color:#00130b;
+    font-weight:800;
+    border:0;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.btn.secondary{
+    background:transparent;
+    border:1px solid #193047;
+    color:#f5f7fa;
+}
+
+</style></head><body><div class="wrap"><div class="top">
+    <div class="logo">🛡️ Cyber<span>Shield</span></div>
+    <div class="small">TAP SHIELD</div>
+</div>
+
+<section class="hero">
+<div class="badge">OVERLAY ATTACK PROTECTION</div>
+<h1>Guard Every <span>Tap</span></h1>
+
+<p>
+    Tap Shield watches for "tapjacking" — when another app secretly
+    draws an invisible overlay on top of CyberShield to hijack your
+    taps. It runs automatically in the background while the app is open.
+</p>
+</section>
+
+<div class="card">
+
+<div id="statusPill" class="status-pill">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M12 2L20 5V11C20 16.5 16.5 20.5 12 22C7.5 20.5 4 16.5 4 11V5L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<path d="M8.5 12L11 14.5L15.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+Protected — Monitoring Active
+</div>
+
+<div class="stat-row">
+    <div class="stat-box">
+        <div id="tapCount" class="stat-num">0</div>
+        <div class="stat-label">OVERLAY TAPS DETECTED</div>
+    </div>
+</div>
+
+<button class="btn secondary" onclick="clearTapLog()">Clear Log</button>
+
+</div>
+
+<div class="card explain" style="text-align:center">
+<h3 style="text-align:center">What is Tapjacking?</h3>
+<p>
+    Tapjacking happens when a malicious app draws an invisible or
+    disguised layer over another app's screen. You think you are
+    tapping something safe — like "Deny" on a permission prompt —
+    but the invisible layer secretly redirects your tap to something
+    else, like "Allow."
+</p>
+<ul>
+    <li>Android reports every touch with flags showing whether another window was drawing over the app at that moment.</li>
+    <li>CyberShield checks this flag on every tap, in real time, with no extra permissions required.</li>
+    <li>If a tap is flagged, you'll get an instant warning and it's logged below.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;text-align:left">Apps That Can Draw Over Your Screen</h3>
+<p style="text-align:left;margin-top:0">
+    These installed apps currently have permission to draw over other
+    apps. If a tap is ever flagged below, one of these is the most
+    likely cause.
+</p>
+<div id="riskList" class="log-list">
+    <div class="log-empty">Scanning installed apps…</div>
+</div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;text-align:left">Recent Detections</h3>
+<div id="logList" class="log-list">
+    <div class="log-empty">No overlay taps detected yet.</div>
+</div>
+</div>
+
+</div>
+
+<script>
+
+function renderRiskApps(apps){
+
+    const list=document.getElementById('riskList');
+
+    if(!list)return;
+
+    if(!apps||apps.length===0){
+        list.innerHTML='<div class="log-empty">No installed apps currently have overlay permission.</div>';
+        return;
+    }
+
+    list.innerHTML='';
+
+    for(let i=0;i<apps.length;i++){
+
+        const a=apps[i];
+
+        const item=document.createElement('div');
+
+        item.className='log-item';
+
+        item.innerHTML=
+            '<span class="log-type partial">'+escHtml(a.name)+'</span>'+
+            '<span class="log-time">'+escHtml(a.package)+'</span>';
+
+        list.appendChild(item);
+    }
+}
+
+function escHtml(text){
+    return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function typeLabel(type){
+    if(type==='FULLY_OBSCURED')return'Full overlay';
+    return'Partial overlay';
+}
+
+function typeClass(type){
+    if(type==='FULLY_OBSCURED')return'full';
+    return'partial';
+}
+
+function renderLog(events){
+
+    const list=document.getElementById('logList');
+
+    if(!list)return;
+
+    if(!events||events.length===0){
+        list.innerHTML='<div class="log-empty">No overlay taps detected yet.</div>';
+        return;
+    }
+
+    list.innerHTML='';
+
+    for(let i=events.length-1;i>=0;i--){
+
+        const e=events[i];
+
+        const item=document.createElement('div');
+
+        item.className='log-item';
+
+        item.innerHTML=
+            '<span class="log-type '+typeClass(e.type)+'">'+typeLabel(e.type)+'</span>'+
+            '<span class="log-time">'+e.time+'</span>';
+
+        list.appendChild(item);
+    }
+}
+
+function refreshStatus(){
+
+    try{
+
+        let count=0;
+        let log=[];
+        let riskApps=[];
+
+        if(window.CyberShieldAndroid){
+
+            if(typeof window.CyberShieldAndroid.getTapjackingCount==='function'){
+                count=window.CyberShieldAndroid.getTapjackingCount();
+            }
+
+            if(typeof window.CyberShieldAndroid.getTapjackingLog==='function'){
+                log=JSON.parse(window.CyberShieldAndroid.getTapjackingLog()||'[]');
+            }
+
+            if(typeof window.CyberShieldAndroid.getOverlayRiskApps==='function'){
+                riskApps=JSON.parse(window.CyberShieldAndroid.getOverlayRiskApps()||'[]');
+            }
+        }
+
+        const countEl=document.getElementById('tapCount');
+        const pill=document.getElementById('statusPill');
+
+        if(countEl)countEl.textContent=count;
+
+        if(pill){
+            if(count>0){
+                pill.className='status-pill alert';
+                pill.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+                    '<path d="M12 2L20 5V11C20 16.5 16.5 20.5 12 22C7.5 20.5 4 16.5 4 11V5L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>'+
+                    '<path d="M12 8V13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
+                    '<circle cx="12" cy="16.5" r="1.1" fill="currentColor"/>'+
+                    '</svg> Overlay Taps Detected';
+            }else{
+                pill.className='status-pill';
+                pill.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+                    '<path d="M12 2L20 5V11C20 16.5 16.5 20.5 12 22C7.5 20.5 4 16.5 4 11V5L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>'+
+                    '<path d="M8.5 12L11 14.5L15.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'+
+                    '</svg> Protected — Monitoring Active';
+            }
+        }
+
+        renderLog(log);
+        renderRiskApps(riskApps);
+
+    }catch(e){
+        console.log('Could not load Tap Shield status.');
+    }
+}
+
+function clearTapLog(){
+
+    if(window.CyberShieldAndroid &&
+        typeof window.CyberShieldAndroid.resetTapjackingLog==='function'){
+
+        window.CyberShieldAndroid.resetTapjackingLog();
+    }
+
+    setTimeout(refreshStatus,150);
+}
+
+window.onTapjackingDetected=function(){
+    refreshStatus();
+};
+
+window.addEventListener('load',refreshStatus);
+
+</script>
+
+</body>
+</html>
